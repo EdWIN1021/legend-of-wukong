@@ -11,9 +11,24 @@ UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class LEGENDOFWUKONG_API UTraceComponent : public UActorComponent
 {
 	GENERATED_BODY()
+	USkeletalMeshComponent* SkeletakMesh;
+
+	UPROPERTY(EditAnywhere)
+	FName Start;
+
+	UPROPERTY(EditAnywhere)
+	FName End;
+
+	UPROPERTY(EditAnywhere)
+	FName Rotation;
+
+	UPROPERTY(EditAnywhere)
+	double BoxCollisionLength = 30.0;
+
+	UPROPERTY(EditAnywhere)
+	bool bDebugMode = false;
 
 public:	
-	// Sets default values for this component's properties
 	UTraceComponent();
 
 protected:
@@ -23,6 +38,4 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-		
 };
