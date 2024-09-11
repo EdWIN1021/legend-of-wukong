@@ -44,7 +44,7 @@ void ULockOnComponent::BeginPlay()
 	}
 }
 
-// StartLockOn - Begins the lock-on process
+
 void ULockOnComponent::StartLockOn(float Radius)
 {
 	if (!OwnerPawn || !Controller.IsValid() || !MovementComponent.IsValid() || !SpringArm)
@@ -77,29 +77,45 @@ void ULockOnComponent::StartLockOn(float Radius)
 
 	TargetActor = Result.GetActor();
 
-	// Set controller and movement settings for lock-on
 	Controller->SetIgnoreLookInput(true);
 	MovementComponent->bOrientRotationToMovement = false;
 	MovementComponent->bUseControllerDesiredRotation = true;
 
-	// Adjust spring arm target offset
 	SpringArm->TargetOffset = FVector(0.0f, 0.0f, 100.0f);
 }
 
-// TickComponent - Called every frame
+void ULockOnComponent::EndLockOn()
+{
+	TargetActor = nullptr;
+	MovementComponent->bOrientRotationToMovement = true;
+	MovementComponent->bUseControllerDesiredRotation = false;
+	SpringArm->TargetOffset = FVector::ZeroVector;
+	Controller->ResetIgnoreLookInput();
+}
+
+void ULockOnComponent::ToggleLockOn(float Radius)
+{
+	if(TargetActor.IsValid())
+	{
+		EndLockOn();
+	} else
+	{
+		StartLockOn(Radius);
+	}
+}
+
 void ULockOnComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	if (!TargetActor.IsValid() || !OwnerPawn || !Controller.IsValid())
 	{
-		// Optionally call Unlock() here if needed
 		return;
 	}
 
 	FVector Location = OwnerPawn->GetActorLocation();
 	FVector TargetLocation = TargetActor->GetActorLocation();
-	TargetLocation.Z -= 125.0f;  // Adjust based on your needs
+	TargetLocation.Z -= 125.0f;
 
 	FRotator NewRotation = UKismetMathLibrary::FindLookAtRotation(Location, TargetLocation);
 

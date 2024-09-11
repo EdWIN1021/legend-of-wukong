@@ -23,14 +23,14 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-	
-	/** 
-	 * Starts the lock-on process.
-	 * @param Radius The radius within which to search for targets.
-	 */
-	UFUNCTION(BlueprintCallable)
-	void StartLockOn(float Radius = 750.f);
 
+	void StartLockOn(float Radius = 750.f);
+	void EndLockOn();
+
+	UFUNCTION(BlueprintCallable)
+	void ToggleLockOn(float Radius = 750.f);
+
+	
 private:
 	/** The actor currently being targeted. */
 	TWeakObjectPtr<AActor> TargetActor;
