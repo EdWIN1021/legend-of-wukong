@@ -115,9 +115,16 @@ void ULockOnComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 	FVector Location = OwnerPawn->GetActorLocation();
 	FVector TargetLocation = TargetActor->GetActorLocation();
+
+	double TargetDistance = FVector::Distance(Location, TargetLocation);
+
+	if(TargetDistance >= AutoEndLockOnDistance)
+	{
+		EndLockOn();
+		return;
+	}
+	
 	TargetLocation.Z -= 125.0f;
-
 	FRotator NewRotation = UKismetMathLibrary::FindLookAtRotation(Location, TargetLocation);
-
 	Controller->SetControlRotation(NewRotation);
 }

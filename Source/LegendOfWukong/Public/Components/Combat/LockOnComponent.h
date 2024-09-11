@@ -31,6 +31,7 @@ protected:
 	void ToggleLockOn(float Radius = 750.f);
 
 	
+	
 private:
 	/** The actor currently being targeted. */
 	TWeakObjectPtr<AActor> TargetActor;
@@ -46,4 +47,7 @@ private:
 
 	/** The spring arm component for camera adjustments. */
 	TObjectPtr<USpringArmComponent> SpringArm;
+
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	double AutoEndLockOnDistance = 1000.f;
 };
