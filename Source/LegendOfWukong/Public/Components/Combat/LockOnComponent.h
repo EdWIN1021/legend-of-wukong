@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Characters/EnemyCharacter.h"
 #include "Components/ActorComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -11,6 +12,15 @@
 /**
  * ULockOnComponent handles the logic for locking onto a target and adjusting the character's view and movement.
  */
+
+DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE_OneParam(
+	FOnUpdatedTargetSignature,
+	ULockOnComponent,
+	OnUpdatedTargetDelegate,
+	AActor*,
+	NewTargetActorRef
+);
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class LEGENDOFWUKONG_API ULockOnComponent : public UActorComponent
 {
@@ -19,6 +29,9 @@ class LEGENDOFWUKONG_API ULockOnComponent : public UActorComponent
 public:	
 	ULockOnComponent();
 
+	UPROPERTY(BlueprintAssignable)
+	FOnUpdatedTargetSignature OnUpdatedTargetDelegate;
+	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 protected:
@@ -29,12 +42,10 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	void ToggleLockOn(float Radius = 750.f);
-
-	
 	
 private:
 	/** The actor currently being targeted. */
-	TWeakObjectPtr<AActor> TargetActor;
+	AEnemyCharacter* TargetActor;
 
 	/** The character that owns this component. */
 	TObjectPtr<ACharacter> OwnerPawn;

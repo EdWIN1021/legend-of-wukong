@@ -20,4 +20,17 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	void UpdateSpeed();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsInCombat = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float CurrentDirection = 0.0f;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void HandleUpdatedTarget(AActor* NewTargetActorRef);
+
+	UFUNCTION(BlueprintCallable)
+	void UpdateDirection();
 };

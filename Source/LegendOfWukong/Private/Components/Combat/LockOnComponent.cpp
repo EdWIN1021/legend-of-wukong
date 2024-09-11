@@ -3,6 +3,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
+#include "Interfaces/Enemy.h"
 
 // Constructor
 ULockOnComponent::ULockOnComponent()
@@ -74,28 +75,32 @@ void ULockOnComponent::StartLockOn(float Radius)
 		UE_LOG(LogTemp, Warning, TEXT("ULockOnComponent: No target found within radius."));
 		return;
 	}
-
-	TargetActor = Result.GetActor();
+	
+	TargetActor = Cast<AEnemyCharacter>(Result.GetActor());
 
 	Controller->SetIgnoreLookInput(true);
 	MovementComponent->bOrientRotationToMovement = false;
 	MovementComponent->bUseControllerDesiredRotation = true;
 
 	SpringArm->TargetOffset = FVector(0.0f, 0.0f, 100.0f);
+	TargetActor->ShowLockOnUI();
+	OnUpdatedTargetDelegate.Broadcast(TargetActor);
 }
 
 void ULockOnComponent::EndLockOn()
 {
+	TargetActor->HideLockOnUI();
 	TargetActor = nullptr;
 	MovementComponent->bOrientRotationToMovement = true;
 	MovementComponent->bUseControllerDesiredRotation = false;
 	SpringArm->TargetOffset = FVector::ZeroVector;
 	Controller->ResetIgnoreLookInput();
+	OnUpdatedTargetDelegate.Broadcast(TargetActor);
 }
 
 void ULockOnComponent::ToggleLockOn(float Radius)
 {
-	if(TargetActor.IsValid())
+	if(IsValid(TargetActor))
 	{
 		EndLockOn();
 	} else
@@ -108,7 +113,7 @@ void ULockOnComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (!TargetActor.IsValid() || !OwnerPawn || !Controller.IsValid())
+	if (!IsValid(TargetActor) || !OwnerPawn || !Controller.IsValid())
 	{
 		return;
 	}
