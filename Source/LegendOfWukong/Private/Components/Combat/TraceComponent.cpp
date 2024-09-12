@@ -3,12 +3,20 @@
 
 #include "Components/Combat/TraceComponent.h"
 
+#include "SWarningOrErrorBox.h"
+#include "Engine/DamageEvents.h"
+#include "Interfaces/Fighter.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 UTraceComponent::UTraceComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
+}
+
+void UTraceComponent::HandleResetAttack()
+{
+	TargetsToIgnore.Empty();
 }
 
 void UTraceComponent::BeginPlay()
@@ -20,12 +28,15 @@ void UTraceComponent::BeginPlay()
 void UTraceComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	if(!bIsAttacking)
+	{
+		return;
+	}
 	
 	FVector StartSocketLocation = SkeletakMesh->GetSocketLocation(Start);
 	FVector EndSocketLocation = SkeletakMesh->GetSocketLocation(End);
 	FQuat ShapeRotation = SkeletakMesh->GetSocketQuaternion(Rotation);
-
-
 
 	TArray<FHitResult> Results;
 	double WeaponDistance = FVector::Distance(StartSocketLocation, EndSocketLocation);
@@ -57,6 +68,38 @@ void UTraceComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 			1.0f,
 			2.0f
 			);
+	}
+
+	if(Results.Num() == 0)
+	{
+		return;
+	}
+
+	float CharacterDamage = 0.0f;
+	IFighter* FighterRef = Cast<IFighter>(GetOwner());
+
+	if(FighterRef)
+	{
+		CharacterDamage = FighterRef->GetDamage();
+	}
+
+	FDamageEvent TargetAttackedEvent; 
+	
+	for(const FHitResult& Hit : Results)
+	{
+		AActor* Target = Hit.GetActor();
+
+		if(TargetsToIgnore.Contains(Target))
+		{
+			continue;
+		}
+		Target->TakeDamage(
+			CharacterDamage,
+			TargetAttackedEvent,
+			GetOwner()->GetInstigatorController(),
+			GetOwner());
+
+		TargetsToIgnore.AddUnique(Target);
 	}
 }
 
