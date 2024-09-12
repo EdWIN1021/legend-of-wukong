@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Characters/BaseCharacter.h"
 #include "Components/ActorComponent.h"
 #include "CombatComponent.generated.h"
 
@@ -17,13 +18,16 @@ public:
 	UPROPERTY(EditAnywhere )
 	TArray<UAnimMontage*> AttackAnimations;
 
-	TObjectPtr<ACharacter> CharacterRef;
+	ABaseCharacter* CharacterRef;
 
 	UPROPERTY(VisibleAnywhere )
 	int ComboCounter = 0;
 	
 	UPROPERTY(VisibleAnywhere )
 	bool bCanAttack = true;
+
+	UPROPERTY(EditAnywhere)
+	float StaminaCost = 5.0f;
 	
 	UFUNCTION(BlueprintCallable)
 	void ComboAttack();
