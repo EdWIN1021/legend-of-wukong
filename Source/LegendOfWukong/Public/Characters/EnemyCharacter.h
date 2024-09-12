@@ -16,9 +16,17 @@ class LEGENDOFWUKONG_API AEnemyCharacter : public ABaseCharacter
 	GENERATED_BODY()
 
 public:
+	AEnemyCharacter();
+
+	UPROPERTY(EditAnywhere)
+	float Speed = 400.f;
+	
 	UFUNCTION(BlueprintImplementableEvent)
 	void ShowLockOnUI();
 	
 	UFUNCTION(BlueprintImplementableEvent)
 	void HideLockOnUI();
+
+	virtual void FacingPlayer(float DeltaTime);
+	virtual void Tick(float DeltaTime) override;
 };

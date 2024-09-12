@@ -5,7 +5,9 @@
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
-
+ABossCharacter::ABossCharacter()
+{
+}
 
 void ABossCharacter::BeginPlay()
 {
@@ -18,6 +20,7 @@ void ABossCharacter::BeginPlay()
 	);
 }
 
+// move to enemy
 void ABossCharacter::DetectPawn(APawn* DetectedPawn, APawn* PawnToDetect)
 {
 	EEnemyState CurrentState = static_cast<EEnemyState>(BlackboardComp->GetValueAsEnum(TEXT("CurrentState")));

@@ -16,15 +16,16 @@ class LEGENDOFWUKONG_API ABossCharacter : public AEnemyCharacter
 	GENERATED_BODY()
 
 public:
+	ABossCharacter();
 	
 	UPROPERTY(EditAnywhere)
 	TEnumAsByte<EEnemyState> InitialState;
 
 	UBlackboardComponent* BlackboardComp;
-
+	
 	UFUNCTION(BlueprintCallable)
 	void DetectPawn(APawn* DetectedPawn, APawn* PawnToDetect);
-
+	
 protected:
 	virtual void BeginPlay() override;
  };
