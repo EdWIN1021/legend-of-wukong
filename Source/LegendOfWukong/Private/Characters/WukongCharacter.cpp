@@ -5,7 +5,7 @@
 
 float AWukongCharacter::GetDamage()
 {
-	return 10.0f;
+	return Attributes[EAttribute::Strength];
 }
 
 void AWukongCharacter::BeginPlay()
