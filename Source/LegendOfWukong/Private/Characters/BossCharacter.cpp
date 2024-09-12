@@ -5,6 +5,7 @@
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
+
 ABossCharacter::ABossCharacter()
 {
 }
@@ -29,8 +30,10 @@ void ABossCharacter::DetectPawn(APawn* DetectedPawn, APawn* PawnToDetect)
 	{
 		return;
 	}
+
+	// here
 	BlackboardComp->SetValueAsEnum(
-		TEXT("CurrentState"),
-		EEnemyState::Range
+		TEXT("CurrentState"), 
+		EEnemyState::Charge
 	);
 }

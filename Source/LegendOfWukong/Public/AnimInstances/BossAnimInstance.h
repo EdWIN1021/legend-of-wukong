@@ -15,6 +15,10 @@ class LEGENDOFWUKONG_API UBossAnimInstance : public UAnimInstance
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Speed = 0.0f;
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsCharging = false;
 };
