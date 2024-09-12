@@ -16,5 +16,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	TMap<EAttribute, float> Attributes;
 
+	UFUNCTION(BlueprintCallable)
+	virtual void ReduceHealth(float Amount);
+
 	virtual float ApplyDamage();
 };

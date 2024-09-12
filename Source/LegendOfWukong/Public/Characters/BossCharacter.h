@@ -4,15 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Characters/EnemyCharacter.h"
-#include "Interfaces/Enemy.h"
 #include "BossCharacter.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class LEGENDOFWUKONG_API ABossCharacter : public AEnemyCharacter
 {
 	GENERATED_BODY()
-	
 };
