@@ -15,5 +15,6 @@ class LEGENDOFWUKONG_API ABaseCharacter : public ACharacter
 public:
 	UPROPERTY(EditAnywhere)
 	TMap<EAttribute, float> Attributes;
-		
+
+	virtual float ApplyDamage();
 };

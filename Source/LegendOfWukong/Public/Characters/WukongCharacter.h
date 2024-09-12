@@ -12,13 +12,32 @@
  * 
  */
 UCLASS()
-class LEGENDOFWUKONG_API AWukongCharacter : public ABaseCharacter, public IFighter
+class LEGENDOFWUKONG_API AWukongCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 
 public:
-	virtual float GetDamage() override;
 
+	AWukongCharacter();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class ULockOnComponent* LockonComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UCombatComponent* CombatComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UTraceComponent* TraceComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UBlockComponent* BlockComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UActionsComponent* ActionsComp;
+
+	
+	virtual float ApplyDamage() override;
+	
 protected:
 	virtual void BeginPlay() override;
 

@@ -4,6 +4,7 @@
 #include "Components/Combat/TraceComponent.h"
 
 #include "SWarningOrErrorBox.h"
+#include "Characters/BaseCharacter.h"
 #include "Engine/DamageEvents.h"
 #include "Interfaces/Fighter.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -76,11 +77,11 @@ void UTraceComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	}
 
 	float CharacterDamage = 0.0f;
-	IFighter* FighterRef = Cast<IFighter>(GetOwner());
-
-	if(FighterRef)
+	
+	
+	if(ABaseCharacter* Owner = Cast<ABaseCharacter>(GetOwner()))
 	{
-		CharacterDamage = FighterRef->GetDamage();
+		CharacterDamage = Owner->ApplyDamage();
 	}
 
 	FDamageEvent TargetAttackedEvent; 

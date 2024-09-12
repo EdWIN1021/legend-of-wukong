@@ -19,5 +19,5 @@ class LEGENDOFWUKONG_API IFighter
 	GENERATED_BODY()
 
 public:
-	virtual float GetDamage(){ return  0.0f; };
+	// virtual float GetDamage(){ return  0.0f; };
 };

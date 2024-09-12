@@ -4,5 +4,7 @@
 #include "Characters/BaseCharacter.h"
 
 
-
-
+float ABaseCharacter::ApplyDamage()
+{
+	return 0;
+}
