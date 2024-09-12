@@ -35,10 +35,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UBlockComponent* BlockComp;
 
-	// delete
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UActionsComponent* ActionsComp;
-	
 	UPROPERTY(EditAnywhere)
 	float SprintCost = 0.1f;
 
@@ -48,14 +44,31 @@ public:
 	UPROPERTY(EditAnywhere)
 	float WalkSpeed = 500.0f;
 
+	UPROPERTY(EditAnywhere)
+	double StaminaRestoreRate = 10.0;
+
+	UPROPERTY(EditAnywhere)
+	bool bCanRestore = true;
+
+	UPROPERTY(EditAnywhere)
+	float StaminaDelayDuration = 2.0f;
+	
 	UFUNCTION(BlueprintCallable)
 	void Sprint();
 
 	UFUNCTION(BlueprintCallable)
 	void Walk();
-		
+
+	UFUNCTION(BlueprintCallable)
+	void RestoreStamina();
+
 	void ReduceStamina(float Amount);
+
 	bool HasEnoughStamina(float Cost);
+
+	UFUNCTION()
+	void EnableStore();
+	
 	virtual float ApplyDamage() override;
 	
 protected:

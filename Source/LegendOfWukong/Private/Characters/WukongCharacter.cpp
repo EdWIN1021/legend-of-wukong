@@ -2,12 +2,12 @@
 
 
 #include "Characters/WukongCharacter.h"
-#include "Components/ActionsComponent.h"
 #include "Components/Combat/BlockComponent.h"
 #include "Components/Combat/CombatComponent.h"
 #include "Components/Combat/LockOnComponent.h"
 #include "Components/Combat/TraceComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 AWukongCharacter::AWukongCharacter()
 {
@@ -16,7 +16,6 @@ AWukongCharacter::AWukongCharacter()
 	CombatComp = CreateDefaultSubobject<UCombatComponent>(TEXT("CombatComp"));
 	TraceComp = CreateDefaultSubobject<UTraceComponent>(TEXT("TraceComp"));
 	BlockComp = CreateDefaultSubobject<UBlockComponent>(TEXT("BlockComp"));
-	ActionsComp = CreateDefaultSubobject<UActionsComponent>(TEXT("ActionsComp"));
 }
 
 void AWukongCharacter::BeginPlay()
@@ -35,11 +34,41 @@ void AWukongCharacter::ReduceStamina(float Amount)
 {
 	Attributes[EAttribute::Stamina] -= Amount;
 	Attributes[EAttribute::Stamina] = UKismetMathLibrary::FClamp(Attributes[EAttribute::Stamina], 0,Attributes[EAttribute::MaxStamina] );
+	bCanRestore = false;
+
+	FLatentActionInfo FunctionInfo(0, 100, TEXT("EnableStore"), this);
+	
+	UKismetSystemLibrary::RetriggerableDelay(
+		GetWorld(),
+		StaminaDelayDuration,
+		FunctionInfo
+	);
 }
 
 bool AWukongCharacter::HasEnoughStamina(float Cost)
 {
 	return Attributes[EAttribute::Stamina] >= Cost;
+}
+
+void AWukongCharacter::EnableStore()
+{
+	bCanRestore = true;
+}
+
+void AWukongCharacter::RestoreStamina()
+{
+	if(!bCanRestore)
+	{
+		return;	
+	}
+	
+	Attributes[EAttribute::Stamina] = UKismetMathLibrary::FInterpTo_Constant(
+		Attributes[EAttribute::Stamina],
+		Attributes[EAttribute::MaxStamina],
+		GetWorld()->DeltaTimeSeconds,
+		StaminaRestoreRate
+		);
+	
 }
 
 void AWukongCharacter::Sprint()
