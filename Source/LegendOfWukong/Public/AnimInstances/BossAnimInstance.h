@@ -18,7 +18,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Speed = 0.0f;
 
+	UFUNCTION(BlueprintCallable)
+	void UpdateSpeed();
+	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsCharging = false;
+
 };

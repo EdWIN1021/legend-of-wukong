@@ -2,11 +2,8 @@
 
 
 #include "Components/Combat/TraceComponent.h"
-
-#include "SWarningOrErrorBox.h"
 #include "Characters/BaseCharacter.h"
 #include "Engine/DamageEvents.h"
-#include "Interfaces/Fighter.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 

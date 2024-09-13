@@ -24,7 +24,6 @@ public:
 	
 	UBTT_ChargeAttack();
 	
-
 	AAIController* ControllerRef;
 
 	ACharacter* CharacterRef;

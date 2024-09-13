@@ -21,7 +21,18 @@ void ABossCharacter::BeginPlay()
 	);
 }
 
-// move to enemy
+void ABossCharacter::RandomAttack()
+{
+	int RandomIndex = FMath::RandRange(0, AttackAnimations.Num() - 1);
+	AnimDuration = GetMesh()->GetAnimInstance()->Montage_Play(AttackAnimations[RandomIndex]);
+	
+}
+
+float ABossCharacter::GetAnimDuration()
+{
+	return AnimDuration;
+}
+
 void ABossCharacter::DetectPawn(APawn* DetectedPawn, APawn* PawnToDetect)
 {
 	EEnemyState CurrentState = static_cast<EEnemyState>(BlackboardComp->GetValueAsEnum(TEXT("CurrentState")));
@@ -31,7 +42,6 @@ void ABossCharacter::DetectPawn(APawn* DetectedPawn, APawn* PawnToDetect)
 		return;
 	}
 
-	// here
 	BlackboardComp->SetValueAsEnum(
 		TEXT("CurrentState"), 
 		EEnemyState::Charge
