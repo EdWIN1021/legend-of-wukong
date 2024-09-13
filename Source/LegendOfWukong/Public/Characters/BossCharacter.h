@@ -25,7 +25,8 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void DetectPawn(APawn* DetectedPawn, APawn* PawnToDetect);
-	
+
+	virtual float ApplyDamage() override;
 protected:
 	virtual void BeginPlay() override;
  };

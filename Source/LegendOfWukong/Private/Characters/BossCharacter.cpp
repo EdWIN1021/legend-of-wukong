@@ -37,3 +37,9 @@ void ABossCharacter::DetectPawn(APawn* DetectedPawn, APawn* PawnToDetect)
 		EEnemyState::Charge
 	);
 }
+
+float ABossCharacter::ApplyDamage()
+{
+	Super::ApplyDamage();
+	return Attributes[EAttribute::Strength];
+}

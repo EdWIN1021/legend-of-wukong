@@ -35,71 +35,84 @@ void UTraceComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 		return;
 	}
 	
-	FVector StartSocketLocation = SkeletakMesh->GetSocketLocation(Start);
-	FVector EndSocketLocation = SkeletakMesh->GetSocketLocation(End);
-	FQuat ShapeRotation = SkeletakMesh->GetSocketQuaternion(Rotation);
+	TArray<FHitResult> AllResults;
 
-	TArray<FHitResult> Results;
-	double WeaponDistance = FVector::Distance(StartSocketLocation, EndSocketLocation);
-	FVector BoxHalfExtent(BoxCollisionLength, BoxCollisionLength, WeaponDistance);;
-	BoxHalfExtent /= 2;
-
-	FCollisionShape Box = FCollisionShape::MakeBox(BoxHalfExtent);
-	FCollisionQueryParams QueryParams(FName(TEXT("Ignore Collision Params")), false, GetOwner());
-	
-	bool bHasFoundTarget = GetWorld()->SweepMultiByChannel(
-		Results,
-		StartSocketLocation,
-		EndSocketLocation,
-		ShapeRotation,
-		ECC_GameTraceChannel1,
-		Box,
-		QueryParams
-		);
-
-	if(bDebugMode)
+	for(const FTraceSockets Socket : Sockets)
 	{
-		FVector CenterPoint = UKismetMathLibrary::VLerp(StartSocketLocation, EndSocketLocation, 0.5f);
-		UKismetSystemLibrary::DrawDebugBox(
-			GetWorld(),
-			CenterPoint,
-			Box.GetExtent(),
-			bHasFoundTarget ? FLinearColor::Green : FLinearColor::Red,
-			ShapeRotation.Rotator(),
-			1.0f,
-			2.0f
-			);
-	}
+		FVector StartSocketLocation = SkeletakMesh->GetSocketLocation(Socket.Start);
+		FVector EndSocketLocation = SkeletakMesh->GetSocketLocation(Socket.End);
+		FQuat ShapeRotation = SkeletakMesh->GetSocketQuaternion(Socket.Rotation);
 
-	if(Results.Num() == 0)
+		TArray<FHitResult> Results;
+		double WeaponDistance = FVector::Distance(StartSocketLocation, EndSocketLocation);
+		FVector BoxHalfExtent(BoxCollisionLength, BoxCollisionLength, WeaponDistance);;
+		BoxHalfExtent /= 2;
+
+		FCollisionShape Box = FCollisionShape::MakeBox(BoxHalfExtent);
+		FCollisionQueryParams QueryParams(FName(TEXT("Ignore Collision Params")), false, GetOwner());
+	
+		bool bHasFoundTarget = GetWorld()->SweepMultiByChannel(
+			Results,
+			StartSocketLocation,
+			EndSocketLocation,
+			ShapeRotation,
+			ECC_GameTraceChannel1,
+			Box,
+			QueryParams
+			);
+
+		for(FHitResult Hit : Results)
+		{
+			AllResults.Add(Hit);
+		}
+
+		if(bDebugMode)
+		{
+			FVector CenterPoint = UKismetMathLibrary::VLerp(StartSocketLocation, EndSocketLocation, 0.5f);
+			UKismetSystemLibrary::DrawDebugBox(
+				GetWorld(),
+				CenterPoint,
+				Box.GetExtent(),
+				bHasFoundTarget ? FLinearColor::Green : FLinearColor::Red,
+				ShapeRotation.Rotator(),
+				1.0f,
+				2.0f
+				);
+		}
+	}
+	
+	if(AllResults.Num() == 0)
 	{
 		return;
 	}
-
-	float CharacterDamage = 0.0f;
 	
+	float CharacterDamage = 0.0f;
+
 	
 	if(ABaseCharacter* Owner = Cast<ABaseCharacter>(GetOwner()))
-	{
+	{	
 		CharacterDamage = Owner->ApplyDamage();
 	}
 
+	UE_LOG(LogTemp, Warning, TEXT("The value of MyFloat is: %f"), CharacterDamage);
+	
 	FDamageEvent TargetAttackedEvent; 
 	
-	for(const FHitResult& Hit : Results)
+	for(const FHitResult& Hit : AllResults)
 	{
 		AActor* Target = Hit.GetActor();
-
+	
 		if(TargetsToIgnore.Contains(Target))
 		{
 			continue;
 		}
+		
 		Target->TakeDamage(
 			CharacterDamage,
 			TargetAttackedEvent,
 			GetOwner()->GetInstigatorController(),
 			GetOwner());
-
+	
 		TargetsToIgnore.AddUnique(Target);
 	}
 }

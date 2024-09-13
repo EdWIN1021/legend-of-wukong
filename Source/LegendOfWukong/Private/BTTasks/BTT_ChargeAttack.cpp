@@ -5,6 +5,7 @@
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Navigation/PathFollowingComponent.h"
 
 UBTT_ChargeAttack::UBTT_ChargeAttack()
@@ -15,8 +16,6 @@ UBTT_ChargeAttack::UBTT_ChargeAttack()
 		"HandleMoveCompleted"
 	);
 }
-
-
 
 EBTNodeResult::Type UBTT_ChargeAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
@@ -44,7 +43,8 @@ EBTNodeResult::Type UBTT_ChargeAttack::ExecuteTask(UBehaviorTreeComponent& Owner
 
 	BossAnim->bIsCharging = true;
 	OwnerComp.GetBlackboardComponent()->SetValueAsBool(TEXT("IsReadyToCharge"),false);
-	
+
+	bIsFinished = false;
 	return EBTNodeResult::InProgress;
 }
 
@@ -59,8 +59,11 @@ void UBTT_ChargeAttack::ChargeAtPlayer()
 
 	ControllerRef->MoveTo(MoveRequest);          
 	ControllerRef->SetFocus(Player);
-
+	
 	ControllerRef->ReceiveMoveCompleted.AddUnique(MoveCompletedDelegate);
+
+	OriginalWalkSpeed = CharacterRef->GetCharacterMovement()->MaxWalkSpeed;
+	CharacterRef->GetCharacterMovement()->MaxWalkSpeed = ChargeWalkSpeed;
 }
 
 void UBTT_ChargeAttack::HandleMoveCompleted()
@@ -74,12 +77,13 @@ void UBTT_ChargeAttack::HandleMoveCompleted()
 		1.0f,
 		false
 	);
-	
+
+	CharacterRef->GetCharacterMovement()->MaxWalkSpeed = OriginalWalkSpeed;
 }
 
 void UBTT_ChargeAttack::FinishAttackTask()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Task in Finshed!"))
+	bIsFinished = true;
 }
 
 void UBTT_ChargeAttack::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
@@ -89,4 +93,12 @@ void UBTT_ChargeAttack::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 		OwnerComp.GetBlackboardComponent()->SetValueAsBool(TEXT("IsReadyToCharge"), false);
 		ChargeAtPlayer();
 	}
+
+	if(!bIsFinished)
+	{
+		return;
+	}
+
+	ControllerRef->ReceiveMoveCompleted.Remove(MoveCompletedDelegate);
+	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 }

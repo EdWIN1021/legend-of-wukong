@@ -36,6 +36,11 @@ public:
 	UPROPERTY(EditAnywhere)
 	float AcceptanceRadius = 100.0f;
 
+	float OriginalWalkSpeed;
+	float ChargeWalkSpeed = 2000.0f;
+
+	bool bIsFinished = false;
+	
 	UFUNCTION()
 	void HandleMoveCompleted();
 

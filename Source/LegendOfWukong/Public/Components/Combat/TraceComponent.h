@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "FTraceSockets.h"
 #include "Components/ActorComponent.h"
 #include "TraceComponent.generated.h"
 
@@ -18,15 +19,18 @@ public:
 
 	USkeletalMeshComponent* SkeletakMesh;
 
+	// UPROPERTY(EditAnywhere)
+	// FName Start;
+	//
+	// UPROPERTY(EditAnywhere)
+	// FName End;
+	//
+	// UPROPERTY(EditAnywhere)
+	// FName Rotation;
+		
 	UPROPERTY(EditAnywhere)
-	FName Start;
-
-	UPROPERTY(EditAnywhere)
-	FName End;
-
-	UPROPERTY(EditAnywhere)
-	FName Rotation;
-
+	TArray<FTraceSockets> Sockets;
+	
 	UPROPERTY(EditAnywhere)
 	double BoxCollisionLength = 30.0;
 
