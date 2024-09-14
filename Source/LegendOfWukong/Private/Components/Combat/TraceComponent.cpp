@@ -31,7 +31,7 @@ void UTraceComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	{
 		return;
 	}
-	
+
 	TArray<FHitResult> AllResults;
 
 	for(const FTraceSockets Socket : Sockets)
@@ -91,14 +91,12 @@ void UTraceComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 		CharacterDamage = Owner->ApplyDamage();
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("The value of MyFloat is: %f"), CharacterDamage);
-	
 	FDamageEvent TargetAttackedEvent; 
 	
 	for(const FHitResult& Hit : AllResults)
 	{
 		AActor* Target = Hit.GetActor();
-	
+
 		if(TargetsToIgnore.Contains(Target))
 		{
 			continue;

@@ -29,6 +29,9 @@ public:
 	TEnumAsByte<EEnemyState> InitialState;
 
 	UBlackboardComponent* BlackboardComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UStatsComponent* StatsComp;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<UAnimMontage*> AttackAnimations;
@@ -37,6 +40,7 @@ public:
 	void DetectPawn(APawn* DetectedPawn, APawn* PawnToDetect);
 	
 	virtual float ApplyDamage() override;
+	virtual void ReduceHealth(float Amount) override;
 	
 protected:
 	virtual void BeginPlay() override;

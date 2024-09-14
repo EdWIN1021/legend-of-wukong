@@ -4,10 +4,13 @@
 #include "Characters/BossCharacter.h"
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Components/StatsComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 
 ABossCharacter::ABossCharacter()
 {
+	StatsComp = CreateDefaultSubobject<UStatsComponent>(TEXT("StatsComp"));
 }
 
 void ABossCharacter::BeginPlay()
@@ -50,6 +53,16 @@ void ABossCharacter::DetectPawn(APawn* DetectedPawn, APawn* PawnToDetect)
 
 float ABossCharacter::ApplyDamage()
 {
-	Super::ApplyDamage();
-	return Attributes[EAttribute::Strength];
+	return StatsComp->Attributes[EAttribute::Strength];
+}
+
+void ABossCharacter::ReduceHealth(float Amount)
+{
+	if(StatsComp->Attributes[EAttribute::Health] <= 0)
+	{
+		return;
+	}
+    	
+	StatsComp->Attributes[EAttribute::Health] -= Amount;
+	StatsComp->Attributes[EAttribute::Health] = UKismetMathLibrary::FClamp(StatsComp->Attributes[EAttribute::Health], 0,StatsComp->Attributes[EAttribute::MaxHealth]);
 }

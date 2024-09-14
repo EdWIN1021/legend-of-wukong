@@ -5,12 +5,9 @@
 #include "CoreMinimal.h"
 #include "AnimInstances/WukongAnimInstance.h"
 #include "Characters/BaseCharacter.h"
-#include "GameFramework/MovementComponent.h"
+#include "Components/StatsComponent.h"
 #include "WukongCharacter.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class LEGENDOFWUKONG_API AWukongCharacter : public ABaseCharacter
 {
@@ -19,21 +16,20 @@ class LEGENDOFWUKONG_API AWukongCharacter : public ABaseCharacter
 public:
 	AWukongCharacter();
 
-	// delete
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class ULockOnComponent* LockonComp;
 
-	// delete
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UCombatComponent* CombatComp;
 
-	// delete
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UTraceComponent* TraceComp;
 
-	// delete
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UBlockComponent* BlockComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UStatsComponent* StatsComp;
 
 	UPROPERTY(EditAnywhere)
 	float SprintCost = 0.1f;
@@ -59,6 +55,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Walk();
 
+	virtual void ReduceHealth(float Amount) override;
+	
 	UFUNCTION(BlueprintCallable)
 	void RestoreStamina();
 
@@ -70,6 +68,10 @@ public:
 	void EnableStore();
 	
 	virtual float ApplyDamage() override;
+
+	UFUNCTION(BlueprintPure)
+	virtual float GetPercentage(EAttribute Current, EAttribute Max);
+	
 	
 protected:
 	virtual void BeginPlay() override;
