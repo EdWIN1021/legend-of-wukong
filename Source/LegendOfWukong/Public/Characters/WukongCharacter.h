@@ -64,6 +64,9 @@ public:
 
 	bool HasEnoughStamina(float Cost);
 
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* DeadthAnimMontage;
+
 	UFUNCTION()
 	void EnableStore();
 	
@@ -71,6 +74,9 @@ public:
 
 	UFUNCTION(BlueprintPure)
 	virtual float GetPercentage(EAttribute Current, EAttribute Max);
+
+	UFUNCTION(BlueprintCallable)
+	void HandleDeath();
 	
 protected:
 	virtual void BeginPlay() override;

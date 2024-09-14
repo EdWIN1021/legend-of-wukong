@@ -39,6 +39,12 @@ float AWukongCharacter::GetPercentage(EAttribute Current, EAttribute Max)
 	return StatsComp->Attributes[Current] / StatsComp->Attributes[Max];
 }
 
+void AWukongCharacter::HandleDeath()
+{
+	PlayAnimMontage(DeadthAnimMontage);
+	DisableInput(GetController<APlayerController>());
+}
+
 void AWukongCharacter::ReduceStamina(float Amount)
 {
 	StatsComp->Attributes[EAttribute::Stamina] -= Amount;
