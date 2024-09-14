@@ -45,6 +45,11 @@ void AWukongCharacter::HandleDeath()
 	DisableInput(GetController<APlayerController>());
 }
 
+void AWukongCharacter::FinishPadAnim()
+{
+	bIsPad = false;
+}
+
 void AWukongCharacter::ReduceStamina(float Amount)
 {
 	StatsComp->Attributes[EAttribute::Stamina] -= Amount;
@@ -66,6 +71,16 @@ void AWukongCharacter::ReduceStamina(float Amount)
 bool AWukongCharacter::HasEnoughStamina(float Cost)
 {
 	return StatsComp->Attributes[EAttribute::Stamina] >= Cost;
+}
+
+void AWukongCharacter::AutoEndLock(AActor* Actor)
+{
+	if(LockonComp->TargetActor != Actor)
+	{
+		return;
+	}
+
+	LockonComp->EndLockOn();
 }
 
 void AWukongCharacter::EnableStore()
@@ -110,6 +125,30 @@ void AWukongCharacter::Sprint()
 void AWukongCharacter::Walk()
 {
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+}
+
+void AWukongCharacter::Pad()
+{
+	if (bIsPad || !HasEnoughStamina(PadCost))
+	{
+		return;
+	}
+
+	bIsPad = true;
+	ReduceStamina(PadCost);
+
+	UE_LOG(LogTemp, Warning, TEXT("Started Pad Animation."));
+
+	FVector Direction = (GetCharacterMovement()->Velocity.Length() < 1) ? GetActorForwardVector() : GetLastMovementInputVector();
+	FRotator Rotation = UKismetMathLibrary::MakeRotFromX(Direction);
+	SetActorRotation(Rotation);
+
+	UE_LOG(LogTemp, Warning, TEXT("Character rotation set."));
+
+	float Duration = PlayAnimMontage(PadAnimMontage);
+	FTimerHandle PadTimerHandle;
+
+	GetWorldTimerManager().SetTimer(PadTimerHandle, this, &AWukongCharacter::FinishPadAnim, Duration, false);
 }
 
 void AWukongCharacter::ReduceHealth(float Amount)

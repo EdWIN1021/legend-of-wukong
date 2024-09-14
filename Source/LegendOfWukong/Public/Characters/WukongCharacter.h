@@ -32,8 +32,11 @@ public:
 	UStatsComponent* StatsComp;
 
 	UPROPERTY(EditAnywhere)
-	float SprintCost = 0.1f;
+	float SprintCost = 1.0f;
 
+	UPROPERTY(EditAnywhere)
+	float PadCost = 5.0f;
+	
 	UPROPERTY(EditAnywhere)
 	float SprintSpeed = 1000.f;
 
@@ -55,18 +58,30 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Walk();
 
+	UPROPERTY(EditAnywhere)
+	bool bIsPad = false;
+	
+	UFUNCTION(BlueprintCallable)
+	void Pad();
+	
 	virtual void ReduceHealth(float Amount) override;
 	
 	UFUNCTION(BlueprintCallable)
 	void RestoreStamina();
 
+	UFUNCTION(BlueprintCallable)
 	void ReduceStamina(float Amount);
 
 	bool HasEnoughStamina(float Cost);
-
+		
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* PadAnimMontage;
+	
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* DeadthAnimMontage;
 
+	void AutoEndLock(AActor* Actor);
+	
 	UFUNCTION()
 	void EnableStore();
 	
@@ -77,7 +92,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void HandleDeath();
-	
+
+	UFUNCTION()
+	void FinishPadAnim();
 protected:
 	virtual void BeginPlay() override;
 

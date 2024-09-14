@@ -29,23 +29,26 @@ class LEGENDOFWUKONG_API ULockOnComponent : public UActorComponent
 public:	
 	ULockOnComponent();
 
+	/** The actor currently being targeted. */
+	AEnemyCharacter* TargetActor;
+	
 	UPROPERTY(BlueprintAssignable)
 	FOnUpdatedTargetSignature OnUpdatedTargetDelegate;
-	
+
+	void EndLockOn();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 protected:
 	virtual void BeginPlay() override;
 
 	void StartLockOn(float Radius = 750.f);
-	void EndLockOn();
+
 
 	UFUNCTION(BlueprintCallable)
 	void ToggleLockOn(float Radius = 750.f);
 	
 private:
-	/** The actor currently being targeted. */
-	AEnemyCharacter* TargetActor;
+
 
 	/** The character that owns this component. */
 	TObjectPtr<ACharacter> OwnerPawn;

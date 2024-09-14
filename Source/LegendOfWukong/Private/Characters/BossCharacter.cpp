@@ -96,6 +96,8 @@ void ABossCharacter::HandleDeath()
 
 	FTimerHandle DestroyTimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(DestroyTimerHandle, this, &ABossCharacter::FinishDeathAnim, Duration, false);
+	AWukongCharacter* Player = GetWorld()->GetFirstPlayerController()->GetPawn<AWukongCharacter>();
+	Player->AutoEndLock(this);
 }
 
 void ABossCharacter::HandlePlayerDeath(bool bIsDead)
