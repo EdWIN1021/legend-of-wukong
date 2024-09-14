@@ -7,8 +7,6 @@
 #include "Components/ActorComponent.h"
 #include "StatsComponent.generated.h"
 
-
-
 DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE_OneParam(
 	FOnUpdateHealthUI,
 	UStatsComponent,
@@ -16,6 +14,15 @@ DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE_OneParam(
 	float,
 	Percentage
 );
+
+DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE_OneParam(
+	FOnUpdateStaminaUI,
+	UStatsComponent,
+	OnUpdateStaminaDelegate,
+	float,
+	Percentage
+);
+
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class LEGENDOFWUKONG_API UStatsComponent : public UActorComponent
@@ -30,6 +37,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnUpdateHealthUI OnUpdateHealthUIDelegate;
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnUpdateStaminaUI OnUpdateStaminaDelegate;
 	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 

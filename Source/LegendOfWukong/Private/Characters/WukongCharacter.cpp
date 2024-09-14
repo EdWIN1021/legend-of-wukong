@@ -52,6 +52,9 @@ void AWukongCharacter::ReduceStamina(float Amount)
 		StaminaDelayDuration,
 		FunctionInfo
 	);
+	
+	StatsComp->OnUpdateStaminaDelegate.Broadcast(
+		GetPercentage(EAttribute::Stamina, EAttribute::MaxStamina));
 }
 
 bool AWukongCharacter::HasEnoughStamina(float Cost)
@@ -77,6 +80,8 @@ void AWukongCharacter::RestoreStamina()
 		GetWorld()->DeltaTimeSeconds,
 		StaminaRestoreRate
 		);
+	StatsComp->OnUpdateStaminaDelegate.Broadcast(
+		GetPercentage(EAttribute::Stamina, EAttribute::MaxStamina));
 }
 
 void AWukongCharacter::Sprint()

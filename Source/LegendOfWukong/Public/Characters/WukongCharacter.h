@@ -72,7 +72,6 @@ public:
 	UFUNCTION(BlueprintPure)
 	virtual float GetPercentage(EAttribute Current, EAttribute Max);
 	
-	
 protected:
 	virtual void BeginPlay() override;
 
