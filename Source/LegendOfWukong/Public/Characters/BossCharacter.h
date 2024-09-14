@@ -57,6 +57,9 @@ public:
 
 	UFUNCTION()
 	void HandlePlayerDeath(bool bIsDead);
+
+	UFUNCTION()
+	void FinishDeathAnim();
 	
 protected:
 	virtual void BeginPlay() override;
