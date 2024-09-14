@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AIController.h"
 #include "EEnemyState.h"
-#include "AnimInstances/BossAnimInstance.h"
 #include "Characters/EnemyCharacter.h"
 #include "BossCharacter.generated.h"
 
@@ -16,8 +16,14 @@ class LEGENDOFWUKONG_API ABossCharacter : public AEnemyCharacter
 {
 	GENERATED_BODY()
 
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* DeathAnim;
+
+	
+	AAIController* Controller;
+	
 public:
-	ABossCharacter();
+	ABossCharacter(); 
 
 	float AnimDuration;
 
@@ -44,6 +50,13 @@ public:
 	
 	virtual float ApplyDamage() override;
 	virtual void ReduceHealth(float Amount) override;
+
+
+	UFUNCTION(BlueprintCallable)
+	void HandleDeath();
+
+	UFUNCTION()
+	void HandlePlayerDeath(bool bIsDead);
 	
 protected:
 	virtual void BeginPlay() override;

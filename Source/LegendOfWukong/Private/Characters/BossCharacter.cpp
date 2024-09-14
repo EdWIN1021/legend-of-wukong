@@ -1,14 +1,16 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Characters/BossCharacter.h"
 #include "AIController.h"
+#include "BrainComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Characters/WukongCharacter.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/StatsComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
 
-ABossCharacter::ABossCharacter()
+ABossCharacter::ABossCharacter() 
 {
 	StatsComp = CreateDefaultSubobject<UStatsComponent>(TEXT("StatsComp"));
 }
@@ -16,11 +18,15 @@ ABossCharacter::ABossCharacter()
 void ABossCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	Controller = GetController<AAIController>();
 	BlackboardComp = GetController<AAIController>()->GetBlackboardComponent();
-
 	BlackboardComp->SetValueAsEnum(
 		TEXT("CurrentState"),
 		InitialState
+	);
+
+	GetWorld()->GetFirstPlayerController()->GetPawn<AWukongCharacter>()->StatsComp->OnZeroHealthDelegate.AddDynamic(
+		this, &ABossCharacter::HandlePlayerDeath
 	);
 }
 
@@ -74,5 +80,24 @@ void ABossCharacter::ReduceHealth(float Amount)
 	StatsComp->OnUpdateHealthUIDelegate.Broadcast(
 	GetPercentage(EAttribute::Health, EAttribute::MaxHealth));
 
+	if(StatsComp->Attributes[EAttribute::Health] == 0 )
+	{
+		
+		StatsComp->OnZeroHealthDelegate.Broadcast(true);
+	}
 
+}
+
+void ABossCharacter::HandleDeath()
+{
+	PlayAnimMontage(DeathAnim);
+	Controller->GetBrainComponent()->StopLogic("defeated");
+	FindComponentByClass<UCapsuleComponent>()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
+void ABossCharacter::HandlePlayerDeath(bool bIsDead)
+{
+	GetController<AAIController>()->GetBlackboardComponent()->SetValueAsEnum(
+		TEXT("CurrentState"), EEnemyState::GameOver
+	);
 }
