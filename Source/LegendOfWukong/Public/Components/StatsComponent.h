@@ -23,6 +23,13 @@ DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE_OneParam(
 	Percentage
 );
 
+DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE_OneParam(
+	FOnZeroHealth,
+	UStatsComponent,
+	OnZeroHealthDelegate,
+	bool,
+	IsZero
+);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class LEGENDOFWUKONG_API UStatsComponent : public UActorComponent
@@ -40,6 +47,9 @@ public:
 	
 	UPROPERTY(BlueprintAssignable)
 	FOnUpdateStaminaUI OnUpdateStaminaDelegate;
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnZeroHealth OnZeroHealthDelegate;
 	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 

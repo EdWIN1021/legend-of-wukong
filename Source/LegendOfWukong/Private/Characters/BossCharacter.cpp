@@ -74,4 +74,5 @@ void ABossCharacter::ReduceHealth(float Amount)
 	StatsComp->OnUpdateHealthUIDelegate.Broadcast(
 	GetPercentage(EAttribute::Health, EAttribute::MaxHealth));
 
+
 }

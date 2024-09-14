@@ -118,6 +118,12 @@ void AWukongCharacter::ReduceHealth(float Amount)
 
 	StatsComp->OnUpdateHealthUIDelegate.Broadcast(
 		GetPercentage(EAttribute::Health, EAttribute::MaxHealth));
+
+	if(StatsComp->Attributes[EAttribute::Health] == 0 )
+	{
+		
+		StatsComp->OnZeroHealthDelegate.Broadcast(true);
+	}
 }
 
 
