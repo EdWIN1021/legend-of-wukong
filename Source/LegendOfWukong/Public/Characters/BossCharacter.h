@@ -38,6 +38,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void DetectPawn(APawn* DetectedPawn, APawn* PawnToDetect);
+
+	UFUNCTION(BlueprintPure)
+	virtual float GetPercentage(EAttribute Current, EAttribute Max);
 	
 	virtual float ApplyDamage() override;
 	virtual void ReduceHealth(float Amount) override;
