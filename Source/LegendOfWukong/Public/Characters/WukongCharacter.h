@@ -95,6 +95,8 @@ public:
 
 	UFUNCTION()
 	void FinishPadAnim();
+	bool CanTakeDamage();
+	
 protected:
 	virtual void BeginPlay() override;
 

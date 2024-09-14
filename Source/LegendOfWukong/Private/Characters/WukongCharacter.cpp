@@ -50,6 +50,16 @@ void AWukongCharacter::FinishPadAnim()
 	bIsPad = false;
 }
 
+bool AWukongCharacter::CanTakeDamage()
+{
+	if(bIsPad)
+	{
+		return false;
+	}
+
+	return true;
+}
+
 void AWukongCharacter::ReduceStamina(float Amount)
 {
 	StatsComp->Attributes[EAttribute::Stamina] -= Amount;
@@ -153,7 +163,12 @@ void AWukongCharacter::Pad()
 
 void AWukongCharacter::ReduceHealth(float Amount)
 {
-	if(StatsComp->Attributes[EAttribute::Health] <= 0)
+	if(StatsComp->Attributes[EAttribute::Health] <= 0 )
+	{
+		return;
+	}
+
+	if(!CanTakeDamage())
 	{
 		return;
 	}
