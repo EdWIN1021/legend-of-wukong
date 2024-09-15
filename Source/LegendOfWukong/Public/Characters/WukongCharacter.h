@@ -21,16 +21,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UCombatComponent* CombatComp;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UTraceComponent* TraceComp;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UBlockComponent* BlockComp;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UStatsComponent* StatsComp;
-
+	
 	UPROPERTY(EditAnywhere)
 	float SprintCost = 1.0f;
 
@@ -50,7 +41,16 @@ public:
 	bool bCanRestore = true;
 
 	UPROPERTY(EditAnywhere)
+	bool bIsPad = false;
+
+	UPROPERTY(EditAnywhere)
 	float StaminaDelayDuration = 2.0f;
+
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* PadAnimMontage;
+	
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* DeadthAnimMontage;
 	
 	UFUNCTION(BlueprintCallable)
 	void Sprint();
@@ -58,14 +58,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Walk();
 
-	UPROPERTY(EditAnywhere)
-	bool bIsPad = false;
-	
 	UFUNCTION(BlueprintCallable)
 	void Pad();
-	
-	virtual void ReduceHealth(float Amount) override;
-	
+
 	UFUNCTION(BlueprintCallable)
 	void RestoreStamina();
 
@@ -73,22 +68,13 @@ public:
 	void ReduceStamina(float Amount);
 
 	bool HasEnoughStamina(float Cost);
-		
-	UPROPERTY(EditAnywhere)
-	UAnimMontage* PadAnimMontage;
 	
-	UPROPERTY(EditAnywhere)
-	UAnimMontage* DeadthAnimMontage;
-
 	void AutoEndLock(AActor* Actor);
+
+	virtual void ReduceHealth(float Amount) override;
 	
 	UFUNCTION()
 	void EnableStore();
-	
-	virtual float ApplyDamage() override;
-
-	UFUNCTION(BlueprintPure)
-	virtual float GetPercentage(EAttribute Current, EAttribute Max);
 
 	UFUNCTION(BlueprintCallable)
 	void HandleDeath();

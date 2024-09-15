@@ -3,13 +3,9 @@
 
 #include "Characters/WukongCharacter.h"
 #include "Components/StatsComponent.h"
-#include "Components/Combat/BlockComponent.h"
 #include "Components/Combat/CombatComponent.h"
 #include "Components/Combat/LockOnComponent.h"
-#include "Components/Combat/TraceComponent.h"
 #include "EAttribute.h"
-
-
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 
@@ -18,25 +14,12 @@ AWukongCharacter::AWukongCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 	LockonComp = CreateDefaultSubobject<ULockOnComponent>(TEXT("LockonComp"));
 	CombatComp = CreateDefaultSubobject<UCombatComponent>(TEXT("CombatComp"));
-	TraceComp = CreateDefaultSubobject<UTraceComponent>(TEXT("TraceComp"));
-	BlockComp = CreateDefaultSubobject<UBlockComponent>(TEXT("BlockComp"));
-	StatsComp = CreateDefaultSubobject<UStatsComponent>(TEXT("StatsComp"));
 }
 
 void AWukongCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	WukongAnim = Cast<UWukongAnimInstance>(GetMesh()->GetAnimInstance());
-}
-
-float AWukongCharacter::ApplyDamage()
-{
-	return StatsComp->Attributes[EAttribute::Strength];
-}
-
-float AWukongCharacter::GetPercentage(EAttribute Current, EAttribute Max)
-{
-	return StatsComp->Attributes[Current] / StatsComp->Attributes[Max];
 }
 
 void AWukongCharacter::HandleDeath()
@@ -52,12 +35,7 @@ void AWukongCharacter::FinishPadAnim()
 
 bool AWukongCharacter::CanTakeDamage()
 {
-	if(bIsPad)
-	{
-		return false;
-	}
-
-	return true;
+	return  !bIsPad;
 }
 
 void AWukongCharacter::ReduceStamina(float Amount)
@@ -91,6 +69,15 @@ void AWukongCharacter::AutoEndLock(AActor* Actor)
 	}
 
 	LockonComp->EndLockOn();
+}
+
+void AWukongCharacter::ReduceHealth(float Amount)
+{
+	if(!CanTakeDamage()){
+		return;
+	}
+	
+	Super::ReduceHealth(Amount);
 }
 
 void AWukongCharacter::EnableStore()
@@ -161,29 +148,5 @@ void AWukongCharacter::Pad()
 	GetWorldTimerManager().SetTimer(PadTimerHandle, this, &AWukongCharacter::FinishPadAnim, Duration, false);
 }
 
-void AWukongCharacter::ReduceHealth(float Amount)
-{
-	if(StatsComp->Attributes[EAttribute::Health] <= 0 )
-	{
-		return;
-	}
-
-	if(!CanTakeDamage())
-	{
-		return;
-	}
-	
-	StatsComp->Attributes[EAttribute::Health] -= Amount;
-	StatsComp->Attributes[EAttribute::Health] = UKismetMathLibrary::FClamp(StatsComp->Attributes[EAttribute::Health], 0,StatsComp->Attributes[EAttribute::MaxHealth]);
-
-	StatsComp->OnUpdateHealthUIDelegate.Broadcast(
-		GetPercentage(EAttribute::Health, EAttribute::MaxHealth));
-
-	if(StatsComp->Attributes[EAttribute::Health] == 0 )
-	{
-		
-		StatsComp->OnZeroHealthDelegate.Broadcast(true);
-	}
-}
 
 

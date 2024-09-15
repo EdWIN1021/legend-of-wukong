@@ -27,7 +27,5 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void HideLockOnUI();
 
-	virtual void 
-	virtual void FacingPlayer(float DeltaTime);
 	virtual void Tick(float DeltaTime) override;
 };

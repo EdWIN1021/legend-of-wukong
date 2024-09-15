@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EAttribute.h"
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
@@ -15,12 +14,19 @@ class LEGENDOFWUKONG_API ABaseCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-	//delete
-	UPROPERTY(EditAnywhere)
-	TMap<EAttribute, float> Attributes;
+	ABaseCharacter();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UStatsComponent* StatsComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UTraceComponent* TraceComp;
+	
+	UFUNCTION(BlueprintPure)
+	virtual float GetPercentage(EAttribute Current, EAttribute Max);
+	
 	UFUNCTION(BlueprintCallable)
-	virtual void ReduceHealth(float Amount) {};
+	virtual void ReduceHealth(float Amount);
 
-	virtual float ApplyDamage() { return 0; };
+	virtual float ApplyDamage();
 };

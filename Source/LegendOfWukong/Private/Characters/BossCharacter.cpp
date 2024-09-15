@@ -12,7 +12,6 @@
 
 ABossCharacter::ABossCharacter() 
 {
-	StatsComp = CreateDefaultSubobject<UStatsComponent>(TEXT("StatsComp"));
 }
 
 void ABossCharacter::BeginPlay()
@@ -55,37 +54,6 @@ void ABossCharacter::DetectPawn(APawn* DetectedPawn, APawn* PawnToDetect)
 		TEXT("CurrentState"), 
 		EEnemyState::Charge
 	);
-}
-
-float ABossCharacter::GetPercentage(EAttribute Current, EAttribute Max)
-{
-	return StatsComp->Attributes[Current] / StatsComp->Attributes[Max];
-}
-
-float ABossCharacter::ApplyDamage()
-{
-	return StatsComp->Attributes[EAttribute::Strength];
-}
-
-void ABossCharacter::ReduceHealth(float Amount)
-{
-	if(StatsComp->Attributes[EAttribute::Health] <= 0)
-	{
-		return;
-	}
-    	
-	StatsComp->Attributes[EAttribute::Health] -= Amount;
-	StatsComp->Attributes[EAttribute::Health] = UKismetMathLibrary::FClamp(StatsComp->Attributes[EAttribute::Health], 0,StatsComp->Attributes[EAttribute::MaxHealth]);
-
-	StatsComp->OnUpdateHealthUIDelegate.Broadcast(
-	GetPercentage(EAttribute::Health, EAttribute::MaxHealth));
-
-	if(StatsComp->Attributes[EAttribute::Health] == 0 )
-	{
-		
-		StatsComp->OnZeroHealthDelegate.Broadcast(true);
-	}
-
 }
 
 void ABossCharacter::HandleDeath()

@@ -2,7 +2,6 @@
 
 
 #include "AnimNotifyStates/ToggleTraceNotifyState.h"
-
 #include "Components/Combat/TraceComponent.h"
 
 void UToggleTraceNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,

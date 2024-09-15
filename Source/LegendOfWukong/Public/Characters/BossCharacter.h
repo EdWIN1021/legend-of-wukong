@@ -18,7 +18,6 @@ class LEGENDOFWUKONG_API ABossCharacter : public AEnemyCharacter
 
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* DeathAnim;
-
 	
 	AAIController* Controller;
 	
@@ -26,31 +25,17 @@ public:
 	ABossCharacter(); 
 
 	float AnimDuration;
-
-	void RandomAttack();
-    
-	float GetAnimDuration();
 	
 	UPROPERTY(EditAnywhere)
 	TEnumAsByte<EEnemyState> InitialState;
 
 	UBlackboardComponent* BlackboardComp;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UStatsComponent* StatsComp;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<UAnimMontage*> AttackAnimations;
 
 	UFUNCTION(BlueprintCallable)
 	void DetectPawn(APawn* DetectedPawn, APawn* PawnToDetect);
-
-	UFUNCTION(BlueprintPure)
-	virtual float GetPercentage(EAttribute Current, EAttribute Max);
-	
-	virtual float ApplyDamage() override;
-	virtual void ReduceHealth(float Amount) override;
-
 
 	UFUNCTION(BlueprintCallable)
 	void HandleDeath();
@@ -60,7 +45,11 @@ public:
 
 	UFUNCTION()
 	void FinishDeathAnim();
+
+	float GetAnimDuration();
+	
+	void RandomAttack();
 	
 protected:
 	virtual void BeginPlay() override;
- };
+};
