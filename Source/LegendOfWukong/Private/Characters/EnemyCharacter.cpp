@@ -36,5 +36,5 @@ void AEnemyCharacter::FacingPlayer(float DeltaTime)
 void AEnemyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	// FacingPlayer(DeltaTime);
+	FacingPlayer(DeltaTime);
 }

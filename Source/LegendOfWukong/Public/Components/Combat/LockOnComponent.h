@@ -48,8 +48,6 @@ protected:
 	void ToggleLockOn(float Radius = 750.f);
 	
 private:
-
-
 	/** The character that owns this component. */
 	TObjectPtr<ACharacter> OwnerPawn;
 
