@@ -3,7 +3,6 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
-#include "Interfaces/Enemy.h"
 
 // Constructor
 ULockOnComponent::ULockOnComponent()

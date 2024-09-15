@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Characters/BaseCharacter.h"
-#include "Interfaces/Enemy.h"
 #include "EnemyCharacter.generated.h"
 
 /**
