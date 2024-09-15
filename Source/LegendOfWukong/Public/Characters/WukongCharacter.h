@@ -48,10 +48,7 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* PadAnimMontage;
-	
-	UPROPERTY(EditAnywhere)
-	UAnimMontage* DeadthAnimMontage;
-	
+
 	UFUNCTION(BlueprintCallable)
 	void Sprint();
 
@@ -76,8 +73,7 @@ public:
 	UFUNCTION()
 	void EnableStore();
 
-	UFUNCTION(BlueprintCallable)
-	void HandleDeath();
+	virtual void HandleDeath() override;
 
 	UFUNCTION()
 	void FinishPadAnim();

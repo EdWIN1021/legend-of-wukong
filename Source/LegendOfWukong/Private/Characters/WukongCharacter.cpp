@@ -24,7 +24,7 @@ void AWukongCharacter::BeginPlay()
 
 void AWukongCharacter::HandleDeath()
 {
-	PlayAnimMontage(DeadthAnimMontage);
+	PlayAnimMontage(DeathAnim);
 	DisableInput(GetController<APlayerController>());
 }
 

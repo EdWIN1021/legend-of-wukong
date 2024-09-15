@@ -16,14 +16,9 @@ class LEGENDOFWUKONG_API ABossCharacter : public AEnemyCharacter
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere)
-	UAnimMontage* DeathAnim;
-	
 	AAIController* Controller;
 	
 public:
-	ABossCharacter(); 
-
 	float AnimDuration;
 	
 	UPROPERTY(EditAnywhere)
@@ -37,14 +32,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DetectPawn(APawn* DetectedPawn, APawn* PawnToDetect);
 
-	UFUNCTION(BlueprintCallable)
-	void HandleDeath();
-
+	// virtual void HandleDeath() override;
+	
 	UFUNCTION()
 	void HandlePlayerDeath(bool bIsDead);
 
-	UFUNCTION()
-	void FinishDeathAnim();
+	// UFUNCTION()
+	// void FinishDeathAnim();
 
 	float GetAnimDuration();
 	

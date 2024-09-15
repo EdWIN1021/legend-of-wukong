@@ -21,6 +21,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UTraceComponent* TraceComp;
+
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* DeathAnim;
 	
 	UFUNCTION(BlueprintPure)
 	virtual float GetPercentage(EAttribute Current, EAttribute Max);
@@ -28,5 +31,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void ReduceHealth(float Amount);
 
+	UFUNCTION(BlueprintCallable)
+	virtual void HandleDeath(){};
+	
 	virtual float ApplyDamage();
 };

@@ -27,5 +27,10 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void HideLockOnUI();
 
+	virtual void HandleDeath() override;
+
+	UFUNCTION()
+	void FinishDeathAnim();
+	
 	virtual void Tick(float DeltaTime) override;
 };

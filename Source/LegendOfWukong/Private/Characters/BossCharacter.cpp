@@ -2,17 +2,9 @@
 
 #include "Characters/BossCharacter.h"
 #include "AIController.h"
-#include "BrainComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Characters/WukongCharacter.h"
-#include "Components/CapsuleComponent.h"
 #include "Components/StatsComponent.h"
-#include "Kismet/KismetMathLibrary.h"
-
-
-ABossCharacter::ABossCharacter() 
-{
-}
 
 void ABossCharacter::BeginPlay()
 {
@@ -33,7 +25,6 @@ void ABossCharacter::RandomAttack()
 {
 	int RandomIndex = FMath::RandRange(0, AttackAnimations.Num() - 1);
 	AnimDuration = GetMesh()->GetAnimInstance()->Montage_Play(AttackAnimations[RandomIndex]);
-	
 }
 
 float ABossCharacter::GetAnimDuration()
@@ -56,18 +47,6 @@ void ABossCharacter::DetectPawn(APawn* DetectedPawn, APawn* PawnToDetect)
 	);
 }
 
-void ABossCharacter::HandleDeath()
-{
-	float Duration  = PlayAnimMontage(DeathAnim);
-	Controller->GetBrainComponent()->StopLogic("defeated");
-	FindComponentByClass<UCapsuleComponent>()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
-	FTimerHandle DestroyTimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(DestroyTimerHandle, this, &ABossCharacter::FinishDeathAnim, Duration, false);
-	AWukongCharacter* Player = GetWorld()->GetFirstPlayerController()->GetPawn<AWukongCharacter>();
-	Player->AutoEndLock(this);
-}
-
 void ABossCharacter::HandlePlayerDeath(bool bIsDead)
 {
 	GetController<AAIController>()->GetBlackboardComponent()->SetValueAsEnum(
@@ -75,7 +54,4 @@ void ABossCharacter::HandlePlayerDeath(bool bIsDead)
 	);
 }
 
-void ABossCharacter::FinishDeathAnim()
-{
-	Destroy();
-}
+
