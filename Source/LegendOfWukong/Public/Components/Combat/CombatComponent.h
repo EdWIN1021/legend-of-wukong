@@ -15,7 +15,7 @@ class LEGENDOFWUKONG_API UCombatComponent : public UActorComponent
 public:	
 	UCombatComponent();
 	
-	UPROPERTY(EditAnywhere )
+	UPROPERTY(EditAnywhere)
 	TArray<UAnimMontage*> AttackAnimations;
 
 	ABaseCharacter* CharacterRef;

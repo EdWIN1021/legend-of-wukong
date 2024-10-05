@@ -39,3 +39,17 @@ void UWukongAnimInstance::UpdateDirection()
 		PawnRef->GetActorRotation()
 	);
 }
+
+void UWukongAnimInstance::UpdateShouldPlayRelaxAnim(float DeltaSeconds, float WaitTime)
+{
+	if(Speed == 0)
+	{
+		IdleTimeout += DeltaSeconds;
+	} else
+	{
+		IdleTimeout = 0; 
+	}
+
+	
+	bShouldPlayRelaxAnim = IdleTimeout >= WaitTime;
+}

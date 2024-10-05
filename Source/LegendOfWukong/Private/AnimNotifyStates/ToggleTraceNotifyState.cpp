@@ -7,15 +7,19 @@
 void UToggleTraceNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
                                           float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
-	Super::NotifyBegin(MeshComp, Animation, TotalDuration, EventReference);
-
-	UTraceComponent* TraceComp = MeshComp->GetOwner()->FindComponentByClass<UTraceComponent>();
-
-	if(!IsValid(TraceComp))
+	if(Animation && MeshComp)
 	{
-		return;
+		Super::NotifyBegin(MeshComp, Animation, TotalDuration, EventReference);
+
+		UTraceComponent* TraceComp = MeshComp->GetOwner()->FindComponentByClass<UTraceComponent>();
+	
+		if(!IsValid(TraceComp))
+		{
+			return;
+		}
+		TraceComp->bIsAttacking = true;
 	}
-	TraceComp->bIsAttacking = true;
+
 }
 
 void UToggleTraceNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
@@ -24,7 +28,7 @@ void UToggleTraceNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimS
 	Super::NotifyEnd(MeshComp, Animation, EventReference);
 
 	UTraceComponent* TraceComp = MeshComp->GetOwner()->FindComponentByClass<UTraceComponent>();
-
+	
 	if(!IsValid(TraceComp))
 	{
 		return;

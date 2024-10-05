@@ -26,13 +26,11 @@ void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 void UCombatComponent::ComboAttack()
 {
-		
 	AWukongCharacter* WukongCharacter = Cast<AWukongCharacter>(CharacterRef);
 	if(WukongCharacter && !WukongCharacter->HasEnoughStamina(StaminaCost))
 	{
 		return;
 	}
-	
 	if(!bCanAttack)
 	{
 		return;
@@ -45,7 +43,7 @@ void UCombatComponent::ComboAttack()
 
 	int MaxCombo = AttackAnimations.Num();
 	ComboCounter = UKismetMathLibrary::Wrap(ComboCounter, -1, MaxCombo - 1);
-	WukongCharacter->ReduceStamina(StaminaCost); // maybe a bug
+	WukongCharacter->ReduceStamina(StaminaCost);
 }
 
 void UCombatComponent::HandleRestAttack()
