@@ -20,12 +20,12 @@ public:
 
 	ABaseCharacter* CharacterRef;
 
-	UPROPERTY(VisibleAnywhere )
+	UPROPERTY(VisibleAnywhere)
 	int ComboCounter = 0;
 	
-	UPROPERTY(VisibleAnywhere )
+	UPROPERTY(VisibleAnywhere)
 	bool bCanAttack = true;
-
+	
 	UPROPERTY(EditAnywhere)
 	float StaminaCost = 5.0f;
 	
@@ -33,9 +33,12 @@ public:
 	void ComboAttack();
 
 	UFUNCTION(BlueprintCallable)
-	void HandleRestAttack();
+	void HandleResetAttack();
 
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Combat");
+	bool bIsAttacking = false;
+	
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	

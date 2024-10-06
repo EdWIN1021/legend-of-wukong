@@ -42,14 +42,15 @@ void UWukongAnimInstance::UpdateDirection()
 
 void UWukongAnimInstance::UpdateShouldPlayRelaxAnim(float DeltaSeconds, float WaitTime)
 {
-	if(Speed == 0)
+
+	if (Speed == 0)
 	{
 		IdleTimeout += DeltaSeconds;
-	} else
+	}
+	else
 	{
 		IdleTimeout = 0; 
 	}
 
-	
 	bShouldPlayRelaxAnim = IdleTimeout >= WaitTime;
 }

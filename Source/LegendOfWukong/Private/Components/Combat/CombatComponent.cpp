@@ -31,12 +31,15 @@ void UCombatComponent::ComboAttack()
 	{
 		return;
 	}
+
 	if(!bCanAttack)
 	{
 		return;
 	}
 	
 	bCanAttack = false;
+	Cast<UWukongAnimInstance>(WukongCharacter->GetMesh()->GetAnimInstance())->IdleTimeout = 0;
+	
 	
 	CharacterRef->PlayAnimMontage(AttackAnimations[ComboCounter]);
 	ComboCounter++;
@@ -46,7 +49,7 @@ void UCombatComponent::ComboAttack()
 	WukongCharacter->ReduceStamina(StaminaCost);
 }
 
-void UCombatComponent::HandleRestAttack()
+void UCombatComponent::HandleResetAttack()
 {
 	bCanAttack = true;
 }

@@ -35,7 +35,7 @@ void AWukongCharacter::FinishPadAnim()
 
 bool AWukongCharacter::CanTakeDamage()
 {
-	return  !bIsPad;
+	return !bIsPad;
 }
 
 void AWukongCharacter::ReduceStamina(float Amount)

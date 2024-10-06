@@ -8,6 +8,9 @@
 #include "Components/StatsComponent.h"
 #include "WukongCharacter.generated.h"
 
+class UCombatComponent;
+class ULockOnComponent;
+
 UCLASS()
 class LEGENDOFWUKONG_API AWukongCharacter : public ABaseCharacter
 {
@@ -17,10 +20,10 @@ public:
 	AWukongCharacter();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class ULockOnComponent* LockonComp;
+	TObjectPtr<ULockOnComponent> LockonComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UCombatComponent* CombatComp;
+	TObjectPtr<UCombatComponent> CombatComp;
 	
 	UPROPERTY(EditAnywhere)
 	float SprintCost = 1.0f;
