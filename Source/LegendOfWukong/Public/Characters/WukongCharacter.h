@@ -6,8 +6,10 @@
 #include "AnimInstances/WukongAnimInstance.h"
 #include "Characters/BaseCharacter.h"
 #include "Components/StatsComponent.h"
+#include "PlayerState/WukongPlayerState.h"
 #include "WukongCharacter.generated.h"
 
+class AWukongPlayerState;
 class UCombatComponent;
 class ULockOnComponent;
 
@@ -84,6 +86,8 @@ public:
 	
 protected:
 	virtual void BeginPlay() override;
+	virtual void PossessedBy(AController* NewController) override;
+	FORCEINLINE AWukongPlayerState* GetWukongPlayerState() const { return  CastChecked<AWukongPlayerState>(GetPlayerState()); };
 
 private:
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))

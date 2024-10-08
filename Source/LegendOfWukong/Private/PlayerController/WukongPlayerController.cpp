@@ -68,12 +68,10 @@ void AWukongPlayerController::Look(const FInputActionValue& Value)
 
 void AWukongPlayerController::Jump(const FInputActionValue& Value)
 {
-	
 }
 
 void AWukongPlayerController::StopJumping(const FInputActionValue& Value)
 {
-	
 }
 
 

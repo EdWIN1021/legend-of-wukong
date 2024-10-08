@@ -7,6 +7,8 @@
 #include "BaseCharacter.generated.h"
 
 
+class UAbilitySystemComponent;
+class UAttributeSet;
 
 UCLASS()
 class LEGENDOFWUKONG_API ABaseCharacter : public ACharacter
@@ -35,4 +37,11 @@ public:
 	virtual void HandleDeath(){};
 	
 	virtual float ApplyDamage();
+
+protected:
+	UPROPERTY()
+	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
+
+	UPROPERTY()
+	TObjectPtr<UAttributeSet> AttributeSet;
 };

@@ -2,9 +2,12 @@
 
 
 #include "Characters/WukongCharacter.h"
+
+#include "AbilitySystemComponent.h"
 #include "Components/StatsComponent.h"
 #include "Components/Combat/CombatComponent.h"
 #include "Components/Combat/LockOnComponent.h"
+#include "PlayerState/WukongPlayerState.h"
 #include "EAttribute.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -20,6 +23,18 @@ void AWukongCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	WukongAnim = Cast<UWukongAnimInstance>(GetMesh()->GetAnimInstance());
+}
+
+void AWukongCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	AWukongPlayerState* WukongPlayerState = GetWukongPlayerState();
+	if(WukongPlayerState)
+	{
+		WukongPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(WukongPlayerState, this);
+		AbilitySystemComponent = WukongPlayerState->GetAbilitySystemComponent();
+		AttributeSet = WukongPlayerState->GetAttributeSet();
+	}
 }
 
 void AWukongCharacter::HandleDeath()
