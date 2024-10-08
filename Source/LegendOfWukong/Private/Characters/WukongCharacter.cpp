@@ -34,6 +34,7 @@ void AWukongCharacter::PossessedBy(AController* NewController)
 		WukongPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(WukongPlayerState, this);
 		AbilitySystemComponent = WukongPlayerState->GetAbilitySystemComponent();
 		AttributeSet = WukongPlayerState->GetAttributeSet();
+		InitializeAttributes();
 	}
 }
 

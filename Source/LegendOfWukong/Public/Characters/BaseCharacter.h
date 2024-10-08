@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemInterface.h"
+#include "GameplayEffect.h"
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
@@ -11,7 +13,7 @@ class UAbilitySystemComponent;
 class UAttributeSet;
 
 UCLASS()
-class LEGENDOFWUKONG_API ABaseCharacter : public ACharacter
+class LEGENDOFWUKONG_API ABaseCharacter : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -35,7 +37,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual void HandleDeath(){};
-	
+
 	virtual float ApplyDamage();
 
 protected:
@@ -44,4 +46,10 @@ protected:
 
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "GameplayEffect | Attributes")
+	TSubclassOf<UGameplayEffect> InitialAttributes;
+
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	void InitializeAttributes() const;
 };

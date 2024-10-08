@@ -4,6 +4,8 @@
 #include "Characters/BaseCharacter.h"
 #include "Components/StatsComponent.h"
 #include "Components/Combat/TraceComponent.h"
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
 ABaseCharacter::ABaseCharacter()
@@ -40,4 +42,19 @@ void ABaseCharacter::ReduceHealth(float Amount)
 float ABaseCharacter::ApplyDamage()
 {
 	return StatsComp->Attributes[EAttribute::Strength];
+}
+
+UAbilitySystemComponent* ABaseCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}
+
+void ABaseCharacter::InitializeAttributes() const
+{
+	if(GetAbilitySystemComponent() && InitialAttributes)
+	{
+		const FGameplayEffectContextHandle ContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
+		const FGameplayEffectSpecHandle  SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(InitialAttributes, 1.0f, ContextHandle);
+		GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), GetAbilitySystemComponent());
+	}
 }
