@@ -13,7 +13,6 @@
 	GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
-
 /**
  * 
  */
@@ -40,4 +39,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category= "Attributes")
 	FGameplayAttributeData MaxStamina;
 	ATTRIBUTE_ACCESSORS(UWukongAttributeSet, MaxStamina);
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category= "Attributes")
+	FGameplayAttributeData Strength;
+	ATTRIBUTE_ACCESSORS(UWukongAttributeSet, Strength);
 };
