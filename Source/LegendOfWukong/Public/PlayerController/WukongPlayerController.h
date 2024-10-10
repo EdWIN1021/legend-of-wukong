@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "WukongPlayerController.generated.h"
 
+class UInputDataAsset;
 struct FInputActionValue;
 class UInputMappingContext;
 class UInputAction;
@@ -34,6 +35,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* LookAction;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Input")
+	UInputDataAsset* InputDataAsset;
+	
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void Jump(const FInputActionValue& Value);
