@@ -32,17 +32,19 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Speed = 0.0f;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool  bIsFalling = false;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bShouldPlayRelaxAnim = false;
 	
 	UFUNCTION(BlueprintCallable)
-	void UpdateSpeed();
-
+	void UpdateVelocity();
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsInCombat = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float CurrentDirection = 0.0f;
-
-
+	
 };

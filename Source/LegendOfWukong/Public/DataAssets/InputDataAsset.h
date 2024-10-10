@@ -11,18 +11,6 @@
 class UInputAction;
 class UInputMappingContext;
 
-USTRUCT(BlueprintType)
-struct FWukongInputActionConfig
-{
-	GENERATED_BODY()
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	FGameplayTag InputTag;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	UInputAction* InputAction;
-};
-
 /**
  * 
  */
@@ -33,9 +21,15 @@ class LEGENDOFWUKONG_API UInputDataAsset : public UDataAsset
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
 	UInputMappingContext* MappingContext;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<FWukongInputActionConfig> InputActions;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
+	UInputAction* LookAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
+	UInputAction* MoveAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
+	UInputAction* JumpAction;
 };

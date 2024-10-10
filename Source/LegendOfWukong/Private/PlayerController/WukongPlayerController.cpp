@@ -7,6 +7,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "DataAssets/InputDataAsset.h"
 #include "GameFramework/Character.h"
 
 
@@ -18,17 +19,20 @@ void AWukongPlayerController::BeginPlay()
 void AWukongPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
-
+	
+	check(InputDataAsset);
 	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 	{
-		Subsystem->AddMappingContext(MappingContext, 0);
+		Subsystem->AddMappingContext(InputDataAsset->MappingContext, 0);
 	}
 
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent)) {
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AWukongPlayerController::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &AWukongPlayerController::StopJumping);
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AWukongPlayerController::Move);
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AWukongPlayerController::Look);
+		EnhancedInputComponent->BindAction(InputDataAsset->MoveAction, ETriggerEvent::Triggered, this, &AWukongPlayerController::Move);
+		EnhancedInputComponent->BindAction(InputDataAsset->LookAction, ETriggerEvent::Triggered, this, &AWukongPlayerController::Look);
+	
+
+		EnhancedInputComponent->BindAction(InputDataAsset->JumpAction, ETriggerEvent::Started, this, &AWukongPlayerController::BeginJump);
+		EnhancedInputComponent->BindAction(InputDataAsset->JumpAction, ETriggerEvent::Completed, this, &AWukongPlayerController::EndJump);
 	}
 }
 
@@ -66,12 +70,14 @@ void AWukongPlayerController::Look(const FInputActionValue& Value)
 	}
 }
 
-void AWukongPlayerController::Jump(const FInputActionValue& Value)
+void AWukongPlayerController::BeginJump(const FInputActionValue& Value)
 {
+	GetCharacter()->Jump();
 }
 
-void AWukongPlayerController::StopJumping(const FInputActionValue& Value)
+void AWukongPlayerController::EndJump(const FInputActionValue& Value)
 {
+	GetCharacter()->StopJumping();
 }
 
 

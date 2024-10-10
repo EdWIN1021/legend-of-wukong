@@ -5,15 +5,17 @@
 
 #include "KismetAnimationLibrary.h"
 
-void UWukongAnimInstance::UpdateSpeed()
+void UWukongAnimInstance::UpdateVelocity()
 {
-	APawn* OwnerPawn { TryGetPawnOwner() };
+	APawn* OwnerPawn  = TryGetPawnOwner();
 	if(!IsValid(OwnerPawn))
 	{
 		return;
 	}
 	FVector Velocity = OwnerPawn->GetVelocity();
+	
 	Speed = static_cast<float>(Velocity.Length());
+	bIsFalling = Velocity.Z > 0.1;
 }
 
 void UWukongAnimInstance::HandleUpdatedTarget(AActor* NewTargetActorRef)

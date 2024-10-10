@@ -26,20 +26,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	TObjectPtr<UInputMappingContext> MappingContext;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	UInputAction* JumpAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	UInputAction* MoveAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	UInputAction* LookAction;
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Input")
 	UInputDataAsset* InputDataAsset;
 	
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
-	void Jump(const FInputActionValue& Value);
-	void StopJumping(const FInputActionValue& Value);
+	void BeginJump(const FInputActionValue& Value);
+	void EndJump(const FInputActionValue& Value);
 };
