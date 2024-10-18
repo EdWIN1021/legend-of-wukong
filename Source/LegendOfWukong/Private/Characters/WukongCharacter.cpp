@@ -39,11 +39,16 @@ void AWukongCharacter::PossessedBy(AController* NewController)
 		WukongPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(WukongPlayerState, this);
 		AbilitySystemComponent = WukongPlayerState->GetAbilitySystemComponent();
 		AttributeSet = WukongPlayerState->GetAttributeSet();
-		GetWukongHUD()->InitializedHUD();
-		GetWukongHUD()->BindDelegates(AbilitySystemComponent, AttributeSet);
-		InitializeAttributes();
-		InitializeAbilities();
+		// GetWukongHUD()->InitializedHUD();
+		// GetWukongHUD()->BindDelegates(AbilitySystemComponent, AttributeSet);
+		// InitializeAttributes();
+		// InitializeAbilities();
 	}
+}
+
+void AWukongCharacter::FinishPadAnim()
+{
+	bCanTakeDamage = true;
 }
 
 AWukongHUD* AWukongCharacter::GetWukongHUD()
@@ -55,9 +60,10 @@ AWukongHUD* AWukongCharacter::GetWukongHUD()
 
 void AWukongCharacter::ReduceStamina(float Amount)
 {
+
 	StatsComp->Attributes[EAttribute::Stamina] -= Amount;
 	StatsComp->Attributes[EAttribute::Stamina] = UKismetMathLibrary::FClamp(StatsComp->Attributes[EAttribute::Stamina], 0,StatsComp->Attributes[EAttribute::MaxStamina] );
-	bCanRestore = false;
+	bCanRestore = true;
 
 	FLatentActionInfo FunctionInfo(0, 100, TEXT("EnableStore"), this);
 	
@@ -88,7 +94,7 @@ void AWukongCharacter::AutoEndLock(AActor* Actor)
 
 void AWukongCharacter::ReduceHealth(float Amount)
 {
-	if(!CanTakeDamage){
+	if(!bCanTakeDamage){
 		return;
 	}
 	
@@ -102,29 +108,29 @@ void AWukongCharacter::EnableStore()
 
 void AWukongCharacter::RestoreStamina()
 {
-	if(bCanRestore)
+	if(!bCanRestore)
 	{
 		return;
 	}
 
-	UWukongAttributeSet* WukongAttributeSet = Cast<UWukongAttributeSet>(AttributeSet);
-	
-	WukongAttributeSet->SetStamina(UKismetMathLibrary::FInterpTo_Constant(
-		WukongAttributeSet->GetStamina(),
-		WukongAttributeSet->GetMaxStamina(),
-		GetWorld()->DeltaTimeSeconds,
-		StaminaRestoreRate
-		));
-	
-	// StatsComp->Attributes[EAttribute::Stamina] = UKismetMathLibrary::FInterpTo_Constant(
-	// 	StatsComp->Attributes[EAttribute::Stamina],
-	// 	StatsComp->Attributes[EAttribute::MaxStamina],
+	// UWukongAttributeSet* WukongAttributeSet = Cast<UWukongAttributeSet>(AttributeSet);
+	//
+	// WukongAttributeSet->SetStamina(UKismetMathLibrary::FInterpTo_Constant(
+	// 	WukongAttributeSet->GetStamina(),
+	// 	WukongAttributeSet->GetMaxStamina(),
 	// 	GetWorld()->DeltaTimeSeconds,
 	// 	StaminaRestoreRate
-	// 	);
-	//
-	// StatsComp->OnUpdateStaminaDelegate.Broadcast(
-	// 	GetPercentage(EAttribute::Stamina, EAttribute::MaxStamina));
+	// 	));
+	
+	StatsComp->Attributes[EAttribute::Stamina] = UKismetMathLibrary::FInterpTo_Constant(
+		StatsComp->Attributes[EAttribute::Stamina],
+		StatsComp->Attributes[EAttribute::MaxStamina],
+		GetWorld()->DeltaTimeSeconds,
+		StaminaRestoreRate
+		);
+	
+	StatsComp->OnUpdateStaminaDelegate.Broadcast(
+		GetPercentage(EAttribute::Stamina, EAttribute::MaxStamina));
 }
 
 void AWukongCharacter::Sprint()
@@ -147,6 +153,18 @@ void AWukongCharacter::Sprint()
 void AWukongCharacter::Walk()
 {
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+}
+
+void AWukongCharacter::Pad()
+{
+	bCanTakeDamage = false;
+	ReduceStamina(PadCost);
+	FVector Direction = (GetCharacterMovement()->Velocity.Length() < 1) ? GetActorForwardVector() : GetLastMovementInputVector();
+	FRotator Rotation = UKismetMathLibrary::MakeRotFromX(Direction);
+	SetActorRotation(Rotation);
+	float Duration = PlayAnimMontage(PadAnimMontage);
+	FTimerHandle PadTimerHandle;
+	GetWorldTimerManager().SetTimer(PadTimerHandle, this, &AWukongCharacter::FinishPadAnim, Duration, false);
 }
 
 

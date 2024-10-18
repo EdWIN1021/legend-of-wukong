@@ -32,9 +32,6 @@ public:
 	
 	UPROPERTY(EditAnywhere)
 	float SprintCost = 1.0f;
-
-	UPROPERTY(EditAnywhere)
-	float JumpCost = 5.0f;
 	
 	UPROPERTY(EditAnywhere)
 	float SprintSpeed = 1000.f;
@@ -46,9 +43,6 @@ public:
 	double StaminaRestoreRate = 10.0;
 
 	UPROPERTY(EditAnywhere)
-	bool bCanRestore = true;
-
-	UPROPERTY(EditAnywhere)
 	float StaminaDelayDuration = 2.0f;
 	
 	UFUNCTION(BlueprintCallable)
@@ -57,6 +51,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Walk();
 
+	UFUNCTION(BlueprintCallable)
+	void Pad();
+
+	const float PadCost = 2.0f;
+	
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* PadAnimMontage;
+	
 	UFUNCTION(BlueprintCallable)
 	void RestoreStamina();
 
@@ -68,11 +70,11 @@ public:
 
 	virtual void ReduceHealth(float Amount) override;
 	
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void EnableStore();
 
-	UPROPERTY()
-	bool CanTakeDamage = false;
+
+	bool bCanRestore = false;
 	
 protected:
 	virtual void BeginPlay() override;
@@ -81,6 +83,9 @@ protected:
 	FORCEINLINE AWukongPlayerState* GetWukongPlayerState() const { return  CastChecked<AWukongPlayerState>(GetPlayerState()); };
 
 private:
+	void FinishPadAnim();
+	bool bCanTakeDamage = true;
+	
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	UWukongAnimInstance* WukongAnim;
 

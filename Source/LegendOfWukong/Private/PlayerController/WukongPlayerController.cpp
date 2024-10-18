@@ -75,20 +75,26 @@ void AWukongPlayerController::Look(const FInputActionValue& Value)
 
 void AWukongPlayerController::BeginJump(const FInputActionValue& Value)
 {
+
 	AWukongCharacter* WukongCharacter = Cast<AWukongCharacter>(GetCharacter());
-	UAbilitySystemComponent* ASC = WukongCharacter->GetAbilitySystemComponent();
-	for(const FGameplayAbilitySpec& AbilitySpec: ASC->GetActivatableAbilities())
-	{
-		if(AbilitySpec.DynamicAbilityTags.HasTagExact(WukongGameplayTags::Player_Ability_Jump))
-		{
-			ASC->TryActivateAbility(AbilitySpec.Handle);
-			return;
-		}
-	}
+	WukongCharacter->ReduceStamina(JumpCost);
+	GetCharacter()->Jump();
+	// AWukongCharacter* WukongCharacter = Cast<AWukongCharacter>(GetCharacter());
+	// UAbilitySystemComponent* ASC = WukongCharacter->GetAbilitySystemComponent();
+	// for(const FGameplayAbilitySpec& AbilitySpec: ASC->GetActivatableAbilities())
+	// {
+	// 	if(AbilitySpec.DynamicAbilityTags.HasTagExact(WukongGameplayTags::Player_Ability_Jump))
+	// 	{
+	// 		WukongCharacter->bCanRestore = false;
+	// 		ASC->TryActivateAbility(AbilitySpec.Handle);
+	// 		return;
+	// 	}
+	// }
 }
 
 void AWukongPlayerController::EndJump(const FInputActionValue& Value)
 {
+
 	GetCharacter()->StopJumping();
 }
 

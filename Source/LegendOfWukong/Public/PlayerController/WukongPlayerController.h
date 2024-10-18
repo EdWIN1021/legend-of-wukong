@@ -31,4 +31,8 @@ protected:
 	void Look(const FInputActionValue& Value);
 	void BeginJump(const FInputActionValue& Value);
 	void EndJump(const FInputActionValue& Value);
+
+
+private:
+	const float JumpCost = 5.0f;
 };
