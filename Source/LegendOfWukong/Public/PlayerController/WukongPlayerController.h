@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "WukongPlayerController.generated.h"
 

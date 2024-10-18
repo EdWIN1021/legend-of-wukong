@@ -11,7 +11,7 @@ namespace WukongGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(InputTag_Jump, "InputTag.Jump");
 
 	/**  Ability Tags **/
-	UE_DEFINE_GAMEPLAY_TAG(AbilityTag_Jump, "AbilityTag.Jump");
+	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_Jump, "Player.Ability.Jump");
 	
-}
+} 
 

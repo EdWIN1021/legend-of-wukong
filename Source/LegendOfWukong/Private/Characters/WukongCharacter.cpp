@@ -9,6 +9,7 @@
 #include "Components/Combat/LockOnComponent.h"
 #include "PlayerState/WukongPlayerState.h"
 #include "EAttribute.h"
+#include "AttributeSets/WukongAttributeSet.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "PlayerController/WukongPlayerController.h"
@@ -41,6 +42,7 @@ void AWukongCharacter::PossessedBy(AController* NewController)
 		GetWukongHUD()->InitializedHUD();
 		GetWukongHUD()->BindDelegates(AbilitySystemComponent, AttributeSet);
 		InitializeAttributes();
+		InitializeAbilities();
 	}
 }
 
@@ -104,15 +106,25 @@ void AWukongCharacter::RestoreStamina()
 	{
 		return;
 	}
+
+	UWukongAttributeSet* WukongAttributeSet = Cast<UWukongAttributeSet>(AttributeSet);
 	
-	StatsComp->Attributes[EAttribute::Stamina] = UKismetMathLibrary::FInterpTo_Constant(
-		StatsComp->Attributes[EAttribute::Stamina],
-		StatsComp->Attributes[EAttribute::MaxStamina],
+	WukongAttributeSet->SetStamina(UKismetMathLibrary::FInterpTo_Constant(
+		WukongAttributeSet->GetStamina(),
+		WukongAttributeSet->GetMaxStamina(),
 		GetWorld()->DeltaTimeSeconds,
 		StaminaRestoreRate
-		);
-	StatsComp->OnUpdateStaminaDelegate.Broadcast(
-		GetPercentage(EAttribute::Stamina, EAttribute::MaxStamina));
+		));
+	
+	// StatsComp->Attributes[EAttribute::Stamina] = UKismetMathLibrary::FInterpTo_Constant(
+	// 	StatsComp->Attributes[EAttribute::Stamina],
+	// 	StatsComp->Attributes[EAttribute::MaxStamina],
+	// 	GetWorld()->DeltaTimeSeconds,
+	// 	StaminaRestoreRate
+	// 	);
+	//
+	// StatsComp->OnUpdateStaminaDelegate.Broadcast(
+	// 	GetPercentage(EAttribute::Stamina, EAttribute::MaxStamina));
 }
 
 void AWukongCharacter::Sprint()

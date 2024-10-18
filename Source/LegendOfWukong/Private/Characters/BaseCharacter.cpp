@@ -6,6 +6,7 @@
 #include "Components/Combat/TraceComponent.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "DataAssets/StartupAbilitiesAsset.h"
 #include "Kismet/KismetMathLibrary.h"
 
 ABaseCharacter::ABaseCharacter()
@@ -58,3 +59,17 @@ void ABaseCharacter::InitializeAttributes() const
 		GetAbilitySystemComponent()->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
 	}
 }
+
+void ABaseCharacter::InitializeAbilities(int32 ApplyLevel) const
+{
+	check(StartupAbilitiesDataAsset);
+	for(auto& Mapping : StartupAbilitiesDataAsset->AbilityMappings){
+		FGameplayAbilitySpec AbilitySpec(Mapping.GameplayAbility);
+		AbilitySpec.SourceObject = AbilitySystemComponent->GetAvatarActor();
+		AbilitySpec.Level = ApplyLevel;
+		AbilitySpec.DynamicAbilityTags.AddTag(Mapping.InputTag);
+		AbilitySystemComponent->GiveAbility(AbilitySpec);
+	}
+}
+
+

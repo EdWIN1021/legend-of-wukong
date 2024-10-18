@@ -6,9 +6,12 @@
 #include "GameFramework/Controller.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "GameplayAbilitySpec.h"
 #include "InputActionValue.h"
+#include "Characters/WukongCharacter.h"
 #include "DataAssets/InputDataAsset.h"
 #include "GameFramework/Character.h"
+#include "WukongGameplayTags/WukongGameplayTags.h"
 
 
 void AWukongPlayerController::BeginPlay()
@@ -72,7 +75,16 @@ void AWukongPlayerController::Look(const FInputActionValue& Value)
 
 void AWukongPlayerController::BeginJump(const FInputActionValue& Value)
 {
-	GetCharacter()->Jump();
+	AWukongCharacter* WukongCharacter = Cast<AWukongCharacter>(GetCharacter());
+	UAbilitySystemComponent* ASC = WukongCharacter->GetAbilitySystemComponent();
+	for(const FGameplayAbilitySpec& AbilitySpec: ASC->GetActivatableAbilities())
+	{
+		if(AbilitySpec.DynamicAbilityTags.HasTagExact(WukongGameplayTags::Player_Ability_Jump))
+		{
+			ASC->TryActivateAbility(AbilitySpec.Handle);
+			return;
+		}
+	}
 }
 
 void AWukongPlayerController::EndJump(const FInputActionValue& Value)

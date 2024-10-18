@@ -15,7 +15,6 @@ void UWukongAnimInstance::UpdateVelocity()
 	FVector Velocity = OwnerPawn->GetVelocity();
 	
 	Speed = static_cast<float>(Velocity.Length());
-	bIsFalling = Velocity.Z > 0.1;
 }
 
 void UWukongAnimInstance::HandleUpdatedTarget(AActor* NewTargetActorRef)

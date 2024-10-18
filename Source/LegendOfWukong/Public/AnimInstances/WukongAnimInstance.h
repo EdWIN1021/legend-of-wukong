@@ -34,9 +34,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Speed = 0.0f;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	bool  bIsFalling = false;
-	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bShouldPlayRelaxAnim = false;
 	

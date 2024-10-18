@@ -9,6 +9,7 @@
 #include "BaseCharacter.generated.h"
 
 
+class UStartupAbilitiesAsset;
 class UAbilitySystemComponent;
 class UAttributeSet;
 
@@ -40,6 +41,7 @@ public:
 
 	virtual float ApplyDamage();
 
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 protected:
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
@@ -50,6 +52,10 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "GameplayEffect | Attributes")
 	TSubclassOf<UGameplayEffect> InitialAttributes;
 
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	void InitializeAttributes() const;
+	
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "GameplayAbilities | StartupAbilities")
+	UStartupAbilitiesAsset* StartupAbilitiesDataAsset;
+
+	void InitializeAbilities(int32 ApplyLevel = 1) const;
 };
