@@ -5,13 +5,16 @@
 #include "CoreMinimal.h"
 #include "AnimInstances/WukongAnimInstance.h"
 #include "Characters/BaseCharacter.h"
-#include "Components/StatsComponent.h"
 #include "PlayerState/WukongPlayerState.h"
 #include "WukongCharacter.generated.h"
 
+
+class AWukongHUD;
 class AWukongPlayerState;
 class UCombatComponent;
 class ULockOnComponent;
+
+
 
 UCLASS()
 class LEGENDOFWUKONG_API AWukongCharacter : public ABaseCharacter
@@ -31,7 +34,7 @@ public:
 	float SprintCost = 1.0f;
 
 	UPROPERTY(EditAnywhere)
-	float PadCost = 5.0f;
+	float JumpCost = 5.0f;
 	
 	UPROPERTY(EditAnywhere)
 	float SprintSpeed = 1000.f;
@@ -46,14 +49,8 @@ public:
 	bool bCanRestore = true;
 
 	UPROPERTY(EditAnywhere)
-	bool bIsPad = false;
-
-	UPROPERTY(EditAnywhere)
 	float StaminaDelayDuration = 2.0f;
-
-	UPROPERTY(EditAnywhere)
-	UAnimMontage* PadAnimMontage;
-
+	
 	UFUNCTION(BlueprintCallable)
 	void Sprint();
 
@@ -61,12 +58,8 @@ public:
 	void Walk();
 
 	UFUNCTION(BlueprintCallable)
-	void Pad();
-
-	UFUNCTION(BlueprintCallable)
 	void RestoreStamina();
 
-	UFUNCTION(BlueprintCallable)
 	void ReduceStamina(float Amount);
 
 	bool HasEnoughStamina(float Cost);
@@ -78,18 +71,18 @@ public:
 	UFUNCTION()
 	void EnableStore();
 
-	virtual void HandleDeath() override;
-
-	UFUNCTION()
-	void FinishPadAnim();
-	bool CanTakeDamage();
+	UPROPERTY()
+	bool CanTakeDamage = false;
 	
 protected:
 	virtual void BeginPlay() override;
 	virtual void PossessedBy(AController* NewController) override;
+	
 	FORCEINLINE AWukongPlayerState* GetWukongPlayerState() const { return  CastChecked<AWukongPlayerState>(GetPlayerState()); };
 
 private:
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	UWukongAnimInstance* WukongAnim;
+
+	AWukongHUD* GetWukongHUD();
 };

@@ -23,9 +23,6 @@ public:
 	virtual void SetupInputComponent() override;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	TObjectPtr<UInputMappingContext> MappingContext;
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Input")
 	UInputDataAsset* InputDataAsset;
 	

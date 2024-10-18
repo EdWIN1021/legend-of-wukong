@@ -15,7 +15,6 @@ class LEGENDOFWUKONG_API UWukongAnimInstance : public UAnimInstance
 	GENERATED_BODY()
 
 public:
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	float IdleTimeout = 0;
 	
@@ -28,6 +27,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void UpdateShouldPlayRelaxAnim(float DeltaSeconds, float WaitTime);
 
+	UFUNCTION(BlueprintCallable)
+	void UpdateVelocity();
+	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Speed = 0.0f;
@@ -38,13 +40,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bShouldPlayRelaxAnim = false;
 	
-	UFUNCTION(BlueprintCallable)
-	void UpdateVelocity();
-	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsInCombat = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float CurrentDirection = 0.0f;
-	
 };

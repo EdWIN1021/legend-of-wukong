@@ -11,6 +11,8 @@
 #include "EAttribute.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "PlayerController/WukongPlayerController.h"
+#include "UI/WukongHUD.h"
 
 AWukongCharacter::AWukongCharacter()
 {
@@ -27,32 +29,27 @@ void AWukongCharacter::BeginPlay()
 
 void AWukongCharacter::PossessedBy(AController* NewController)
 {
+	
 	Super::PossessedBy(NewController);
 	AWukongPlayerState* WukongPlayerState = GetWukongPlayerState();
-	if(WukongPlayerState)
+
+	if (WukongPlayerState)
 	{
 		WukongPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(WukongPlayerState, this);
 		AbilitySystemComponent = WukongPlayerState->GetAbilitySystemComponent();
 		AttributeSet = WukongPlayerState->GetAttributeSet();
+		GetWukongHUD()->InitializedHUD();
+		GetWukongHUD()->BindDelegates(AbilitySystemComponent, AttributeSet);
 		InitializeAttributes();
 	}
 }
 
-void AWukongCharacter::HandleDeath()
+AWukongHUD* AWukongCharacter::GetWukongHUD()
 {
-	PlayAnimMontage(DeathAnim);
-	DisableInput(GetController<APlayerController>());
+	AWukongPlayerController* WukongPlayerController =  Cast<AWukongPlayerController>(GetController());
+	return Cast<AWukongHUD>(WukongPlayerController->GetHUD());
 }
 
-void AWukongCharacter::FinishPadAnim()
-{
-	bIsPad = false;
-}
-
-bool AWukongCharacter::CanTakeDamage()
-{
-	return !bIsPad;
-}
 
 void AWukongCharacter::ReduceStamina(float Amount)
 {
@@ -89,7 +86,7 @@ void AWukongCharacter::AutoEndLock(AActor* Actor)
 
 void AWukongCharacter::ReduceHealth(float Amount)
 {
-	if(!CanTakeDamage()){
+	if(!CanTakeDamage){
 		return;
 	}
 	
@@ -140,29 +137,8 @@ void AWukongCharacter::Walk()
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 }
 
-void AWukongCharacter::Pad()
-{
-	if (bIsPad || !HasEnoughStamina(PadCost))
-	{
-		return;
-	}
 
-	bIsPad = true;
-	ReduceStamina(PadCost);
 
-	UE_LOG(LogTemp, Warning, TEXT("Started Pad Animation."));
-
-	FVector Direction = (GetCharacterMovement()->Velocity.Length() < 1) ? GetActorForwardVector() : GetLastMovementInputVector();
-	FRotator Rotation = UKismetMathLibrary::MakeRotFromX(Direction);
-	SetActorRotation(Rotation);
-
-	UE_LOG(LogTemp, Warning, TEXT("Character rotation set."));
-
-	float Duration = PlayAnimMontage(PadAnimMontage);
-	FTimerHandle PadTimerHandle;
-
-	GetWorldTimerManager().SetTimer(PadTimerHandle, this, &AWukongCharacter::FinishPadAnim, Duration, false);
-}
 
 
 

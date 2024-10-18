@@ -7,7 +7,6 @@
 #include "AbilitySystemComponent.h"
 #include "WukongAttributeSet.generated.h"
 
-
 #define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
 	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
@@ -17,6 +16,7 @@
 /**
  * 
  */
+
 UCLASS()
 class LEGENDOFWUKONG_API UWukongAttributeSet : public UAttributeSet
 {
