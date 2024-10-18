@@ -27,10 +27,10 @@ void UTraceComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// if(!bIsAttacking)
-	// {
-	// 	return;
-	// }
+	if(!bIsAttacking)
+	{
+		return;
+	}
 
 	TArray<FHitResult> AllResults;
 
