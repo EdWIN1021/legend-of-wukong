@@ -19,7 +19,12 @@ class LEGENDOFWUKONG_API AWukongPlayerState : public APlayerState, public IAbili
 
 public:
 	AWukongPlayerState();
+	
+	//~ Begin IAbilitySystemInterface Interface
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	//~ End IAbilitySystemInterface Interface
+
+	/* AttributeSet Getter */ 
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; };
 	
 protected:

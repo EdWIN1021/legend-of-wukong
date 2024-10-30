@@ -9,7 +9,6 @@
 #include "Components/Combat/LockOnComponent.h"
 #include "PlayerState/WukongPlayerState.h"
 #include "EAttribute.h"
-#include "AttributeSets/WukongAttributeSet.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "PlayerController/WukongPlayerController.h"
@@ -32,17 +31,23 @@ void AWukongCharacter::PossessedBy(AController* NewController)
 {
 	
 	Super::PossessedBy(NewController);
-	AWukongPlayerState* WukongPlayerState = GetWukongPlayerState();
+	AWukongPlayerState* WukongPlayerState = Cast<AWukongPlayerState>(GetPlayerState());
 
 	if (WukongPlayerState)
 	{
+		/* Set up the Ability System Component and Attribute Set for the character by retrieving them from the PlayerState. */
 		WukongPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(WukongPlayerState, this);
 		AbilitySystemComponent = WukongPlayerState->GetAbilitySystemComponent();
 		AttributeSet = WukongPlayerState->GetAttributeSet();
-		// GetWukongHUD()->InitializedHUD();
-		// GetWukongHUD()->BindDelegates(AbilitySystemComponent, AttributeSet);
-		// InitializeAttributes();
-		// InitializeAbilities();
+
+		/* Setup enables the HUD to display dynamic updates on character attributes and abilities, such as health. */
+		AWukongHUD* WukongHUD = GetWukongHUD();
+		WukongHUD->InitializedHUD();
+		WukongHUD->BindDelegates(AbilitySystemComponent, AttributeSet);
+
+		/* Initialize the character's default attributes and abilities, preparing them for gameplay. */
+		InitializeAttributes();
+		InitializeAbilities();
 	}
 }
 

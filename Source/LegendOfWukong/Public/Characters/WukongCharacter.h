@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "AnimInstances/WukongAnimInstance.h"
 #include "Characters/BaseCharacter.h"
-#include "PlayerState/WukongPlayerState.h"
 #include "WukongCharacter.generated.h"
 
 
@@ -73,14 +72,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void EnableStore();
 
-
 	bool bCanRestore = false;
+
+	/*   */
+	virtual void PossessedBy(AController* NewController) override;
+
 	
 protected:
 	virtual void BeginPlay() override;
-	virtual void PossessedBy(AController* NewController) override;
-	
-	FORCEINLINE AWukongPlayerState* GetWukongPlayerState() const { return  CastChecked<AWukongPlayerState>(GetPlayerState()); };
 
 private:
 	void FinishPadAnim();
@@ -89,5 +88,6 @@ private:
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	UWukongAnimInstance* WukongAnim;
 
+	/*  */
 	AWukongHUD* GetWukongHUD();
 };

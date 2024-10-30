@@ -18,13 +18,12 @@ struct FAbilityMappings
 {
 	GENERATED_BODY()
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta=(Categories = "Player"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FGameplayTag InputTag;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<UGameplayAbility> GameplayAbility;
 };
-
 
 UCLASS()
 class LEGENDOFWUKONG_API UStartupAbilitiesAsset : public UDataAsset
@@ -32,6 +31,6 @@ class LEGENDOFWUKONG_API UStartupAbilitiesAsset : public UDataAsset
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "GameAbilities")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<FAbilityMappings> AbilityMappings;
 };

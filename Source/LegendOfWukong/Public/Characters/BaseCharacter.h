@@ -41,21 +41,27 @@ public:
 
 	virtual float ApplyDamage();
 
+
+	//~ Begin IAbilitySystemInterface Interface
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	//~ End IAbilitySystemInterface Interface
+	
 protected:
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "GameplayEffect | Attributes")
+	
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "GameplayAbilitySystem | GameplayEffects")
 	TSubclassOf<UGameplayEffect> InitialAttributes;
 
-	void InitializeAttributes() const;
-	
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "GameplayAbilities | StartupAbilities")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "GameplayAbilitySystem | GameplayAbilities")
 	UStartupAbilitiesAsset* StartupAbilitiesDataAsset;
 
+	/* Sets up the character's default attributes */
+	void InitializeAttributes() const;
+
+	/* Grants the character their default abilities at the specified level. */
 	void InitializeAbilities(int32 ApplyLevel = 1) const;
 };

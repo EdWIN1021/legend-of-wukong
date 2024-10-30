@@ -41,10 +41,8 @@ public:
 	// void FinishDeathAnim();
 
 	float GetAnimDuration();
-	
 	void RandomAttack();
 	
 protected:
 	virtual void BeginPlay() override;
-	
 };
