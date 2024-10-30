@@ -14,9 +14,12 @@ namespace WukongGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(InputTag_Attack, "InputTag.Attack");
 	UE_DEFINE_GAMEPLAY_TAG(InputTag_LockOn, "InputTag.LockOn");
 	
-
 	/**  Ability Tags **/
 	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_Jump, "Player.Ability.Jump");
+	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_Pad, "Player.Ability.Pad");
+	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_Sprint, "Player.Ability.Sprint");
+	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_Attack, "Player.Ability.Attack");
+	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_LockOn, "Player.Ability.LockOn");
 	
 } 
 

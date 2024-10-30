@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
 #include "GameplayEffect.h"
+#include "DataAssets/DataAsset_Abilities.h"
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
@@ -57,11 +58,12 @@ protected:
 	TSubclassOf<UGameplayEffect> InitialAttributes;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "GameplayAbilitySystem | GameplayAbilities")
-	UStartupAbilitiesAsset* StartupAbilitiesDataAsset;
+	UDataAsset_Abilities* AbilityDataAsset;
 
+	
 	/* Sets up the character's default attributes */
 	void InitializeAttributes() const;
 
-	/* Grants the character their default abilities at the specified level. */
-	void InitializeAbilities(int32 ApplyLevel = 1) const;
+	/* Grants the character their default abilities */
+	void InitializeAbilities() const;
 };

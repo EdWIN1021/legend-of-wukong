@@ -60,14 +60,13 @@ void ABaseCharacter::InitializeAttributes() const
 	}
 }
 
-void ABaseCharacter::InitializeAbilities(int32 ApplyLevel) const
+void ABaseCharacter::InitializeAbilities() const
 {
-	check(StartupAbilitiesDataAsset);
-	for(auto& Mapping : StartupAbilitiesDataAsset->AbilityMappings){
-		FGameplayAbilitySpec AbilitySpec(Mapping.GameplayAbility);
+	check(AbilityDataAsset);
+	for(auto& AbilityInfo : AbilityDataAsset->AbilitySet){
+		FGameplayAbilitySpec AbilitySpec(AbilityInfo.Ability);
 		AbilitySpec.SourceObject = AbilitySystemComponent->GetAvatarActor();
-		AbilitySpec.Level = ApplyLevel;
-		AbilitySpec.DynamicAbilityTags.AddTag(Mapping.InputTag);
+		AbilitySpec.DynamicAbilityTags.AddTag(AbilityInfo.Tag);
 		AbilitySystemComponent->GiveAbility(AbilitySpec);
 	}
 }
