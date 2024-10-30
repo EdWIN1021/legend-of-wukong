@@ -7,7 +7,7 @@
 #include "GameFramework/PlayerController.h"
 #include "WukongPlayerController.generated.h"
 
-class UInputDataAsset;
+class UDataAsset_Input;
 struct FInputActionValue;
 class UInputMappingContext;
 class UInputAction;
@@ -23,16 +23,26 @@ public:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
 
-protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Input")
-	UInputDataAsset* InputDataAsset;
-	
+	UDataAsset_Input* InputDataAsset;
+
+protected:
+
+	/* Character input functions  */
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
-	void BeginJump(const FInputActionValue& Value);
-	void EndJump(const FInputActionValue& Value);
-
+	
+	void BeginJump();
+	void EndJump();
+	
+	void Sprint();
+	void EndSprint();
+	
+	void Pad();
+	
+	const float JumpCost = 5.0f;
 
 private:
-	const float JumpCost = 5.0f;
+	/* Finds and returns an input action associated with the specified gameplay tag */
+	UInputAction* FindInputActionByTag(const FGameplayTag& InputTag);
 };

@@ -4,12 +4,13 @@
 #include "PlayerController/WukongPlayerController.h"
 #include "Engine/LocalPlayer.h"
 #include "GameFramework/Controller.h"
-#include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "EnhancedInputComponent.h"
 #include "InputActionValue.h"
 #include "Characters/WukongCharacter.h"
-#include "DataAssets/InputDataAsset.h"
+#include "DataAssets/DataAsset_Input.h"
 #include "GameFramework/Character.h"
+#include "WukongGameplayTags/WukongGameplayTags.h"
 
 
 void AWukongPlayerController::BeginPlay()
@@ -20,20 +21,23 @@ void AWukongPlayerController::BeginPlay()
 void AWukongPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
-	
 	check(InputDataAsset);
+	
 	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 	{
 		Subsystem->AddMappingContext(InputDataAsset->MappingContext, 0);
 	}
-
-	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent)) {
-		EnhancedInputComponent->BindAction(InputDataAsset->MoveAction, ETriggerEvent::Triggered, this, &AWukongPlayerController::Move);
-		EnhancedInputComponent->BindAction(InputDataAsset->LookAction, ETriggerEvent::Triggered, this, &AWukongPlayerController::Look);
 	
+	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent)) {
+		EnhancedInputComponent->BindAction(FindInputActionByTag(WukongGameplayTags::InputTag_Move), ETriggerEvent::Triggered, this, &AWukongPlayerController::Move);
+		EnhancedInputComponent->BindAction(FindInputActionByTag(WukongGameplayTags::InputTag_Look), ETriggerEvent::Triggered, this, &AWukongPlayerController::Look);
+		EnhancedInputComponent->BindAction(FindInputActionByTag(WukongGameplayTags::InputTag_Pad), ETriggerEvent::Started, this, &AWukongPlayerController::Pad);
 
-		EnhancedInputComponent->BindAction(InputDataAsset->JumpAction, ETriggerEvent::Started, this, &AWukongPlayerController::BeginJump);
-		EnhancedInputComponent->BindAction(InputDataAsset->JumpAction, ETriggerEvent::Completed, this, &AWukongPlayerController::EndJump);
+		EnhancedInputComponent->BindAction(FindInputActionByTag(WukongGameplayTags::InputTag_Jump), ETriggerEvent::Started, this, &AWukongPlayerController::BeginJump);
+		EnhancedInputComponent->BindAction(FindInputActionByTag(WukongGameplayTags::InputTag_Jump), ETriggerEvent::Completed, this, &AWukongPlayerController::EndJump);
+		
+		EnhancedInputComponent->BindAction(FindInputActionByTag(WukongGameplayTags::InputTag_Sprint), ETriggerEvent::Triggered, this, &AWukongPlayerController::Sprint);
+		EnhancedInputComponent->BindAction(FindInputActionByTag(WukongGameplayTags::InputTag_Sprint), ETriggerEvent::Completed, this, &AWukongPlayerController::EndSprint);
 	}
 }
 
@@ -71,7 +75,7 @@ void AWukongPlayerController::Look(const FInputActionValue& Value)
 	}
 }
 
-void AWukongPlayerController::BeginJump(const FInputActionValue& Value)
+void AWukongPlayerController::BeginJump()
 {
 
 	AWukongCharacter* WukongCharacter = Cast<AWukongCharacter>(GetCharacter());
@@ -90,10 +94,35 @@ void AWukongPlayerController::BeginJump(const FInputActionValue& Value)
 	// }
 }
 
-void AWukongPlayerController::EndJump(const FInputActionValue& Value)
+void AWukongPlayerController::EndJump()
 {
 
 	GetCharacter()->StopJumping();
+}
+
+void AWukongPlayerController::Sprint()
+{
+}
+
+void AWukongPlayerController::EndSprint()
+{
+}
+
+void AWukongPlayerController::Pad()
+{
+}
+
+UInputAction* AWukongPlayerController::FindInputActionByTag(const FGameplayTag& InputTag)
+{
+	check(InputDataAsset);
+	for(auto& WukongAction : InputDataAsset->WukongActions )
+	{
+		if(WukongAction.InputTag == InputTag && WukongAction.InputAction)
+		{
+			return WukongAction.InputAction;
+		}
+	}
+	return nullptr;
 }
 
 
