@@ -32,17 +32,23 @@ protected:
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	
-	void BeginJump();
-	void EndJump();
+	void Jump();
 	
 	void Sprint();
 	void EndSprint();
 	
 	void Pad();
-	
-	const float JumpCost = 5.0f;
 
 private:
-	/* Finds and returns an input action associated with the specified gameplay tag */
+	/**
+	 * Finds and returns an input action associated with the specified gameplay tag
+	 * @param InputTag The gameplay tag that identifies the InputAction.
+	 */
 	UInputAction* FindInputActionByTag(const FGameplayTag& InputTag);
+
+	/**
+	 * Activates an ability associated with the specified gameplay tag.
+	 * @param AbilityTag The gameplay tag that identifies the ability to be activated.
+	 */
+	void ActivateAbilityByTag(const FGameplayTag& AbilityTag);
 };

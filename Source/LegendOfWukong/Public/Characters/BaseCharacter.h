@@ -42,7 +42,6 @@ public:
 
 	virtual float ApplyDamage();
 
-
 	//~ Begin IAbilitySystemInterface Interface
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	//~ End IAbilitySystemInterface Interface
@@ -60,8 +59,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "GameplayAbilitySystem | GameplayAbilities")
 	UDataAsset_Abilities* AbilityDataAsset;
 
-	
-	/* Sets up the character's default attributes */
+	/* Initializes character attributes using a gameplay effect */
 	void InitializeAttributes() const;
 
 	/* Grants the character their default abilities */

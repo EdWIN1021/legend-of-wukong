@@ -33,8 +33,7 @@ void AWukongPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(FindInputActionByTag(WukongGameplayTags::InputTag_Look), ETriggerEvent::Triggered, this, &AWukongPlayerController::Look);
 		EnhancedInputComponent->BindAction(FindInputActionByTag(WukongGameplayTags::InputTag_Pad), ETriggerEvent::Started, this, &AWukongPlayerController::Pad);
 
-		EnhancedInputComponent->BindAction(FindInputActionByTag(WukongGameplayTags::InputTag_Jump), ETriggerEvent::Started, this, &AWukongPlayerController::BeginJump);
-		EnhancedInputComponent->BindAction(FindInputActionByTag(WukongGameplayTags::InputTag_Jump), ETriggerEvent::Completed, this, &AWukongPlayerController::EndJump);
+		EnhancedInputComponent->BindAction(FindInputActionByTag(WukongGameplayTags::InputTag_Jump), ETriggerEvent::Started, this, &AWukongPlayerController::Jump);
 		
 		EnhancedInputComponent->BindAction(FindInputActionByTag(WukongGameplayTags::InputTag_Sprint), ETriggerEvent::Triggered, this, &AWukongPlayerController::Sprint);
 		EnhancedInputComponent->BindAction(FindInputActionByTag(WukongGameplayTags::InputTag_Sprint), ETriggerEvent::Completed, this, &AWukongPlayerController::EndSprint);
@@ -75,33 +74,14 @@ void AWukongPlayerController::Look(const FInputActionValue& Value)
 	}
 }
 
-void AWukongPlayerController::BeginJump()
+void AWukongPlayerController::Jump()
 {
-
-	AWukongCharacter* WukongCharacter = Cast<AWukongCharacter>(GetCharacter());
-	WukongCharacter->ReduceStamina(JumpCost);
-	GetCharacter()->Jump();
-	// AWukongCharacter* WukongCharacter = Cast<AWukongCharacter>(GetCharacter());
-	// UAbilitySystemComponent* ASC = WukongCharacter->GetAbilitySystemComponent();
-	// for(const FGameplayAbilitySpec& AbilitySpec: ASC->GetActivatableAbilities())
-	// {
-	// 	if(AbilitySpec.DynamicAbilityTags.HasTagExact(WukongGameplayTags::Player_Ability_Jump))
-	// 	{
-	// 		WukongCharacter->bCanRestore = false;
-	// 		ASC->TryActivateAbility(AbilitySpec.Handle);
-	// 		return;
-	// 	}
-	// }
-}
-
-void AWukongPlayerController::EndJump()
-{
-
-	GetCharacter()->StopJumping();
+	ActivateAbilityByTag(WukongGameplayTags::Player_Ability_Jump);
 }
 
 void AWukongPlayerController::Sprint()
 {
+	
 }
 
 void AWukongPlayerController::EndSprint()
@@ -110,6 +90,7 @@ void AWukongPlayerController::EndSprint()
 
 void AWukongPlayerController::Pad()
 {
+	ActivateAbilityByTag(WukongGameplayTags::Player_Ability_Pad);
 }
 
 UInputAction* AWukongPlayerController::FindInputActionByTag(const FGameplayTag& InputTag)
@@ -123,6 +104,21 @@ UInputAction* AWukongPlayerController::FindInputActionByTag(const FGameplayTag& 
 		}
 	}
 	return nullptr;
+}
+
+void AWukongPlayerController::ActivateAbilityByTag(const FGameplayTag& AbilityTag)
+{
+	AWukongCharacter* WukongCharacter = Cast<AWukongCharacter>(GetCharacter());
+	UAbilitySystemComponent* ASC = WukongCharacter->GetAbilitySystemComponent();
+	
+	for(const FGameplayAbilitySpec& AbilitySpec: ASC->GetActivatableAbilities())
+	{
+		if(AbilitySpec.DynamicAbilityTags.HasTagExact(AbilityTag))
+		{
+			ASC->TryActivateAbility(AbilitySpec.Handle);
+			return;
+		}
+	}
 }
 
 
