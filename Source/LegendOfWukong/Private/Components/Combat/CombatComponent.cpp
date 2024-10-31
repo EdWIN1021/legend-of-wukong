@@ -2,9 +2,6 @@
 
 
 #include "Components/Combat/CombatComponent.h"
-#include "Characters/WukongCharacter.h"
-#include "GameFramework/Character.h"
-#include "Kismet/KismetMathLibrary.h"
 
 UCombatComponent::UCombatComponent()
 {
@@ -14,7 +11,6 @@ UCombatComponent::UCombatComponent()
 void UCombatComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	CharacterRef = GetOwner<ABaseCharacter>();
 }
 
 void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -22,30 +18,6 @@ void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
-void UCombatComponent::ComboAttack()
-{
-	AWukongCharacter* WukongCharacter = Cast<AWukongCharacter>(CharacterRef);
-	// if(WukongCharacter && !WukongCharacter->HasEnoughStamina(StaminaCost))
-	// {
-	// 	return;
-	// }
-
-	if(!bCanAttack)
-	{
-		return;
-	}
-	
-	bCanAttack = false;
-	Cast<UWukongAnimInstance>(WukongCharacter->GetMesh()->GetAnimInstance())->IdleTimeout = 0;
-	
-	
-	CharacterRef->PlayAnimMontage(AttackAnimations[ComboCounter]);
-	ComboCounter++;
-
-	int MaxCombo = AttackAnimations.Num();
-	ComboCounter = UKismetMathLibrary::Wrap(ComboCounter, -1, MaxCombo - 1);
-	// WukongCharacter->ReduceStamina(StaminaCost);
-}
 
 void UCombatComponent::HandleResetAttack()
 {
