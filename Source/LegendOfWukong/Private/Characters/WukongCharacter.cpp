@@ -82,23 +82,6 @@ void AWukongCharacter::ReduceHealth(float Amount)
 	Super::ReduceHealth(Amount);
 }
 
-void AWukongCharacter::RestoreStamina()
-{
-	// if(!bCanRestore)
-	// {
-	// 	return;
-	// }
-	
-	UWukongAttributeSet* WukongAttributeSet = Cast<UWukongAttributeSet>(AttributeSet);
-	
-	WukongAttributeSet->SetStamina(UKismetMathLibrary::FInterpTo_Constant(
-		WukongAttributeSet->GetStamina(),
-		WukongAttributeSet->GetMaxStamina(),
-		GetWorld()->DeltaTimeSeconds,
-		StaminaRestoreRate
-		));
-}
-
 
 
 

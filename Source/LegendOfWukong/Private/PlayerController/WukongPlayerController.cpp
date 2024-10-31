@@ -12,6 +12,7 @@
 #include "DataAssets/DataAsset_Input.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "PlayerState/WukongPlayerState.h"
 #include "WukongGameplayTags/WukongGameplayTags.h"
 
@@ -41,6 +42,11 @@ void AWukongPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(FindInputActionByTag(WukongGameplayTags::InputTag_Sprint), ETriggerEvent::Triggered, this, &AWukongPlayerController::Sprint);
 		EnhancedInputComponent->BindAction(FindInputActionByTag(WukongGameplayTags::InputTag_Sprint), ETriggerEvent::Completed, this, &AWukongPlayerController::EndSprint);
 	}
+}
+
+void AWukongPlayerController::EnableRestoreStamina()
+{
+	bCanRestoreStamina = true;
 }
 
 void AWukongPlayerController::Move(const FInputActionValue& Value)
@@ -131,13 +137,30 @@ void AWukongPlayerController::ActivateAbilityByTag(const FGameplayTag& AbilityTa
 	{
 		if(AbilitySpec.DynamicAbilityTags.HasTagExact(AbilityTag))
 		{
+			bCanRestoreStamina = false;
 			ASC->TryActivateAbility(AbilitySpec.Handle);
 			return;
 		}
 	}
 }
 
-bool AWukongPlayerController::HasEnoughStamina(float Cost)
+void AWukongPlayerController::RestoreStamina()
+{
+
+	if(!bCanRestoreStamina) return;
+	
+	AWukongCharacter* WukongCharacter = Cast<AWukongCharacter>(GetCharacter());
+	UWukongAttributeSet* WukongAttributeSet = Cast<UWukongAttributeSet>(WukongCharacter->GetAttributeSet());
+	
+	WukongAttributeSet->SetStamina(UKismetMathLibrary::FInterpTo_Constant(
+		WukongAttributeSet->GetStamina(),
+		WukongAttributeSet->GetMaxStamina(),
+		GetWorld()->DeltaTimeSeconds,
+		10.0f
+		));
+}
+
+bool AWukongPlayerController::HasEnoughStamina(float Cost) const
 {
 	AWukongCharacter* WukongCharacter = Cast<AWukongCharacter>(GetCharacter());
 	UWukongAttributeSet* WukongAttributeSet = Cast<UWukongAttributeSet>(WukongCharacter->GetAttributeSet());

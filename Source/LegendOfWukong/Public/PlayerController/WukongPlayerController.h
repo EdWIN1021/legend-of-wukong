@@ -29,18 +29,23 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Input")
 	UDataAsset_Input* InputDataAsset;
 
+	UFUNCTION(BlueprintCallable)
+	void EnableRestoreStamina();
+
 private:
-	/* Character input functions  */
+	/** Character input functions  */
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void Jump();
 	void Sprint();
 	void EndSprint();
 	void Pad();
-
+	
 	/** Event triggered when the sprint key is released to end the ability. */
 	UPROPERTY(BlueprintAssignable)
 	FOnFinishSprintSignature OnFinishSprint;
+
+	bool bCanRestoreStamina = true;	
 	
 	/**
 	 * Finds and returns an input action associated with the specified gameplay tag
@@ -53,6 +58,18 @@ private:
 	 * @param AbilityTag The gameplay tag that identifies the ability to be activated.
 	 */
 	void ActivateAbilityByTag(const FGameplayTag& AbilityTag, float Cost);
+
+	/**
+	 * Restores the character's stamina to its maximum value.
+	 */
+	UFUNCTION(BlueprintCallable)
+	void RestoreStamina();
 	
-	bool HasEnoughStamina(float Cost);
+	/**
+	 * Checks if the character has sufficient stamina for an action.
+	 *
+	 * @param Cost The stamina required for the action.
+	 * @return True if current stamina is greater than or equal to the cost; otherwise, false.
+	 */
+	bool HasEnoughStamina(float Cost) const;
 };

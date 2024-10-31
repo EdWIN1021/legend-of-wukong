@@ -32,9 +32,6 @@ public:
 	UPROPERTY(EditAnywhere)
 	double StaminaRestoreRate = 10.0f;
 	
-	UFUNCTION(BlueprintCallable)
-	void RestoreStamina();
-	
 	void AutoEndLock(AActor* Actor);
 
 	virtual void ReduceHealth(float Amount) override;
