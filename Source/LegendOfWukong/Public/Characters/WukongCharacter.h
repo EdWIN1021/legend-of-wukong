@@ -10,7 +10,6 @@
 
 class AWukongHUD;
 class AWukongPlayerState;
-class UCombatComponent;
 class ULockOnComponent;
 
 
@@ -25,9 +24,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<ULockOnComponent> LockonComp;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UCombatComponent> CombatComp;
 
 	virtual void PossessedBy(AController* NewController) override;
 

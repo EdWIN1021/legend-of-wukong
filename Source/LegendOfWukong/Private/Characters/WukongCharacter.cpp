@@ -5,7 +5,6 @@
 
 #include "AbilitySystemComponent.h"
 #include "Components/StatsComponent.h"
-#include "Components/Combat/CombatComponent.h"
 #include "Components/Combat/LockOnComponent.h"
 #include "PlayerState/WukongPlayerState.h"
 #include "EAttribute.h"
@@ -19,7 +18,6 @@ AWukongCharacter::AWukongCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	LockonComp = CreateDefaultSubobject<ULockOnComponent>(TEXT("LockonComp"));
-	CombatComp = CreateDefaultSubobject<UCombatComponent>(TEXT("CombatComp"));
 }
 
 void AWukongCharacter::BeginPlay()
