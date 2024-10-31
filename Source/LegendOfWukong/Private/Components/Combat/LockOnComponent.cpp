@@ -4,9 +4,8 @@
 #include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
 
-// Constructor
 ULockOnComponent::ULockOnComponent()
-	: TargetActor(nullptr)
+	: TargetEnemy(nullptr)
 {
 	PrimaryComponentTick.bCanEverTick = true;
 }
@@ -14,110 +13,83 @@ ULockOnComponent::ULockOnComponent()
 void ULockOnComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// Initialize owner and components
-	OwnerPawn = GetOwner<ACharacter>();
-	if (!OwnerPawn)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("ULockOnComponent: OwnerPawn is not valid!"));
-		return;
-	}
-
+	
+	Owner = GetOwner<ACharacter>();
 	Controller = GetWorld()->GetFirstPlayerController();
-	if (!Controller.IsValid())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("ULockOnComponent: Controller is not valid!"));
-		return;
-	}
-
-	MovementComponent = OwnerPawn->GetCharacterMovement();
-	if (!MovementComponent.IsValid())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("ULockOnComponent: MovementComponent is not valid!"));
-	}
-
-	SpringArm = OwnerPawn->FindComponentByClass<USpringArmComponent>();
-	if (!SpringArm)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("ULockOnComponent: SpringArm is not valid!"));
-	}
+	MovementComponent = Owner->GetCharacterMovement();
+	SpringArm = Owner->FindComponentByClass<USpringArmComponent>();
 }
 
 
-void ULockOnComponent::StartLockOn(float Radius)
+void ULockOnComponent::StartLockOn()
 {
-	if (!OwnerPawn || !Controller.IsValid() || !MovementComponent.IsValid() || !SpringArm)
+	if (!Owner.IsValid() || !Controller.IsValid() || !MovementComponent.IsValid() || !SpringArm.IsValid())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("ULockOnComponent: Required components are missing."));
 		return;
 	}
 
 	FHitResult Result;
-	FVector Location = OwnerPawn->GetActorLocation();
-	FCollisionShape Shape = FCollisionShape::MakeSphere(Radius);
+	FVector Location = Owner->GetActorLocation();
+	FCollisionShape Shape = FCollisionShape::MakeSphere(LockOnRadius);
 
-	FCollisionQueryParams QueryParams(FName(TEXT("Ignore Collision Params")), false, OwnerPawn);
+	FCollisionQueryParams QueryParams(FName(TEXT("Ignore Collision Params")), false, Owner.Get());
 
 	bool bHasFoundTarget = GetWorld()->SweepSingleByChannel(
 		Result,
 		Location,
 		Location,
 		FQuat::Identity,
-		ECollisionChannel::ECC_GameTraceChannel1,
+		ECC_GameTraceChannel1,
 		Shape,
 		QueryParams
 	);
 
 	if (!bHasFoundTarget)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("ULockOnComponent: No target found within radius."));
 		return;
 	}
 	
-	TargetActor = Cast<AEnemyCharacter>(Result.GetActor());
+	TargetEnemy = Cast<AEnemyCharacter>(Result.GetActor());
 
 	Controller->SetIgnoreLookInput(true);
 	MovementComponent->bOrientRotationToMovement = false;
 	MovementComponent->bUseControllerDesiredRotation = true;
 
 	SpringArm->TargetOffset = FVector(0.0f, 0.0f, 100.0f);
-	TargetActor->ShowLockOnUI();
-	OnUpdatedTargetDelegate.Broadcast(TargetActor);
+	TargetEnemy->ShowLockOnUI();
+	OnUpdatedTargetDelegate.Broadcast(TargetEnemy.Get());
 }
 
 void ULockOnComponent::EndLockOn()
 {
-	TargetActor->HideLockOnUI();
-	TargetActor = nullptr;
+	TargetEnemy->HideLockOnUI();
+	TargetEnemy = nullptr;
+	
 	MovementComponent->bOrientRotationToMovement = true;
 	MovementComponent->bUseControllerDesiredRotation = false;
+	
 	SpringArm->TargetOffset = FVector::ZeroVector;
 	Controller->ResetIgnoreLookInput();
-	OnUpdatedTargetDelegate.Broadcast(TargetActor);
+	
+	OnUpdatedTargetDelegate.Broadcast(TargetEnemy.Get());
 }
 
-void ULockOnComponent::ToggleLockOn(float Radius)
+void ULockOnComponent::ToggleLockOn()
 {
-	if(IsValid(TargetActor))
-	{
-		EndLockOn();
-	} else
-	{
-		StartLockOn(Radius);
-	}
+	TargetEnemy.IsValid() ? EndLockOn() : StartLockOn();
 }
 
 void ULockOnComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (!IsValid(TargetActor) || !OwnerPawn || !Controller.IsValid())
+	if (!TargetEnemy.IsValid() || !Owner.IsValid() || !Controller.IsValid())
 	{
 		return;
 	}
 
-	FVector Location = OwnerPawn->GetActorLocation();
-	FVector TargetLocation = TargetActor->GetActorLocation();
+	FVector Location = Owner->GetActorLocation();
+	FVector TargetLocation = TargetEnemy->GetActorLocation();
 
 	double TargetDistance = FVector::Distance(Location, TargetLocation);
 

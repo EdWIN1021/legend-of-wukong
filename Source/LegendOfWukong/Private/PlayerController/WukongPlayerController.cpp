@@ -9,6 +9,7 @@
 #include "InputActionValue.h"
 #include "AttributeSets/WukongAttributeSet.h"
 #include "Characters/WukongCharacter.h"
+#include "Components/Combat/LockOnComponent.h"
 #include "DataAssets/DataAsset_Input.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -42,6 +43,7 @@ void AWukongPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(FindInputActionByTag(WukongGameplayTags::InputTag_Sprint), ETriggerEvent::Triggered, this, &AWukongPlayerController::Sprint);
 		EnhancedInputComponent->BindAction(FindInputActionByTag(WukongGameplayTags::InputTag_Sprint), ETriggerEvent::Completed, this, &AWukongPlayerController::EndSprint);
 
+		EnhancedInputComponent->BindAction(FindInputActionByTag(WukongGameplayTags::InputTag_LockOn), ETriggerEvent::Started, this, &AWukongPlayerController::LockOn);
 		EnhancedInputComponent->BindAction(FindInputActionByTag(WukongGameplayTags::InputTag_Attack), ETriggerEvent::Started, this, &AWukongPlayerController::ComboAttack);
 	}
 }
@@ -95,6 +97,12 @@ void AWukongPlayerController::Sprint()
 	/** Don't activate if Player is not moving */
 	if(Cast<AWukongCharacter>(GetCharacter())->GetCharacterMovement()->Velocity.Equals(FVector::Zero(), 1)) return;
 	ActivateAbilityByTag(WukongGameplayTags::Player_Ability_Sprint, 1.0f);
+}
+
+void AWukongPlayerController::LockOn()
+{
+	AWukongCharacter* WukongCharacter = Cast<AWukongCharacter>(GetCharacter());
+	WukongCharacter->GetLockOnComponent()->ToggleLockOn();
 }
 
 void AWukongPlayerController::EndSprint()

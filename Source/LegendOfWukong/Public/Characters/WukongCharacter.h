@@ -7,12 +7,9 @@
 #include "Characters/BaseCharacter.h"
 #include "WukongCharacter.generated.h"
 
-
 class AWukongHUD;
 class AWukongPlayerState;
 class ULockOnComponent;
-
-
 
 UCLASS()
 class LEGENDOFWUKONG_API AWukongCharacter : public ABaseCharacter
@@ -22,25 +19,28 @@ class LEGENDOFWUKONG_API AWukongCharacter : public ABaseCharacter
 public:
 	AWukongCharacter();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<ULockOnComponent> LockonComp;
-
-	virtual void PossessedBy(AController* NewController) override;
-
-	void AutoEndLock(AActor* Actor);
-
 	virtual void ReduceHealth(float Amount) override;
+
+	/**
+	 * Retrieves the Lock-On component.
+	 *
+	 * @return A pointer to the ULockOnComponent instance.
+	 */
+	ULockOnComponent* GetLockOnComponent() { return LockOnComp; };
+	virtual void PossessedBy(AController* NewController) override;
 	
 protected:
 	virtual void BeginPlay() override;
 
 private:
 	bool bCanTakeDamage = true;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"))
+	TObjectPtr<ULockOnComponent> LockOnComp;
 
-	// lock on anim
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
-	UWukongAnimInstance* WukongAnim;
-
+	UWukongAnimInstance* WukongAnimInstance;
+	
 	/**
 	 * Retrieves the Wukong HUD instance.
 	 *

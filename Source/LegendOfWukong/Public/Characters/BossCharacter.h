@@ -15,14 +15,14 @@ UCLASS()
 class LEGENDOFWUKONG_API ABossCharacter : public AEnemyCharacter
 {
 	GENERATED_BODY()
-
-	AAIController* Controller;
 	
 public:
 	float AnimDuration;
 	
 	UPROPERTY(EditAnywhere)
 	TEnumAsByte<EEnemyState> InitialState;
+
+	AAIController* Controller;
 
 	UBlackboardComponent* BlackboardComp;
 	
@@ -31,16 +31,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void DetectPawn(APawn* DetectedPawn, APawn* PawnToDetect);
-
-	// virtual void HandleDeath() override;
 	
 	UFUNCTION()
 	void HandlePlayerDeath(bool bIsDead);
 
-	// UFUNCTION()
-	// void FinishDeathAnim();
-
 	float GetAnimDuration();
+	
 	void RandomAttack();
 	
 protected:

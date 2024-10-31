@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Characters/EnemyCharacter.h"
-
 #include "AIController.h"
 #include "BrainComponent.h"
 #include "Characters/WukongCharacter.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/Combat/LockOnComponent.h"
 
 
 AEnemyCharacter::AEnemyCharacter()
@@ -15,20 +15,28 @@ AEnemyCharacter::AEnemyCharacter()
 
 void AEnemyCharacter::HandleDeath()
 {
-	float Duration  = PlayAnimMontage(DeathAnim);
+	float AnimDuration  = PlayAnimMontage(DeathAnim);
 	
 	GetController<AAIController>()->GetBrainComponent()->StopLogic("defeated");
 	FindComponentByClass<UCapsuleComponent>()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	FTimerHandle DestroyTimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(DestroyTimerHandle, this, &AEnemyCharacter::FinishDeathAnim, Duration, false);
-	AWukongCharacter* Player = GetWorld()->GetFirstPlayerController()->GetPawn<AWukongCharacter>();
-	Player->AutoEndLock(this);
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AEnemyCharacter::FinishDeathAnim, AnimDuration, false);
+	EndLockOn();
 }
 
 void AEnemyCharacter::FinishDeathAnim()
 {
 	Destroy();
+}
+
+void AEnemyCharacter::EndLockOn()
+{
+	AWukongCharacter* Player = GetWorld()->GetFirstPlayerController()->GetPawn<AWukongCharacter>();
+	ULockOnComponent* LockOnComp = Player->GetLockOnComponent();
+	if(LockOnComp->TargetEnemy == this){
+		LockOnComp->EndLockOn();
+	}
 }
 
 void AEnemyCharacter::Tick(float DeltaTime)

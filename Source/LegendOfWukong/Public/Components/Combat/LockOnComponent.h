@@ -9,7 +9,6 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "LockOnComponent.generated.h"
 
-
 DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE_OneParam(
 	FOnUpdatedTargetSignature,
 	ULockOnComponent,
@@ -26,36 +25,35 @@ class LEGENDOFWUKONG_API ULockOnComponent : public UActorComponent
 public:	
 	ULockOnComponent();
 
-	/** The actor currently being targeted. */
-	AEnemyCharacter* TargetActor;
+	TWeakObjectPtr<AEnemyCharacter> TargetEnemy;
 	
 	UPROPERTY(BlueprintAssignable)
 	FOnUpdatedTargetSignature OnUpdatedTargetDelegate;
 
+	UFUNCTION(BlueprintCallable)
+	void ToggleLockOn();
+	
+	void StartLockOn();
 	void EndLockOn();
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
+	
 protected:
 	virtual void BeginPlay() override;
-
-	void StartLockOn(float Radius = 750.f);
-
-
-	UFUNCTION(BlueprintCallable)
-	void ToggleLockOn(float Radius = 750.f);
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	
 private:
+	float LockOnRadius = 750.f;
+
 	/** The character that owns this component. */
-	TObjectPtr<ACharacter> OwnerPawn;
+	TWeakObjectPtr<ACharacter> Owner;
+	
+	/** The spring arm component for camera adjustments. */
+	TWeakObjectPtr<USpringArmComponent> SpringArm;
 
 	/** The player controller for the current player. */
 	TWeakObjectPtr<APlayerController> Controller;
 
 	/** The movement component of the owning character. */
 	TWeakObjectPtr<UCharacterMovementComponent> MovementComponent;
-
-	/** The spring arm component for camera adjustments. */
-	TObjectPtr<USpringArmComponent> SpringArm;
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	double AutoEndLockOnDistance = 1000.f;

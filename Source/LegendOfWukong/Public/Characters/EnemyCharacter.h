@@ -28,8 +28,10 @@ public:
 
 	virtual void HandleDeath() override;
 
-	UFUNCTION()
 	void FinishDeathAnim();
 	
 	virtual void Tick(float DeltaTime) override;
+
+private:
+	void EndLockOn();
 };

@@ -18,19 +18,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	float IdleTimeout = 0;
 	
-	UFUNCTION(BlueprintCallable)
-	void HandleUpdatedTarget(AActor* NewTargetActorRef);
-
-	UFUNCTION(BlueprintCallable)
-	void UpdateDirection();
-
-	UFUNCTION(BlueprintCallable)
-	void UpdateShouldPlayRelaxAnim(float DeltaSeconds, float WaitTime);
-
-	UFUNCTION(BlueprintCallable)
-	void UpdateVelocity();
-	
-protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Speed = 0.0f;
 
@@ -42,4 +29,16 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float CurrentDirection = 0.0f;
+	
+	UFUNCTION(BlueprintCallable)
+	void UpdatedTarget(AActor* NewTarget);
+
+	UFUNCTION(BlueprintCallable)
+	void UpdateDirection();
+
+	UFUNCTION(BlueprintCallable)
+	void UpdateShouldPlayRelaxAnim(float DeltaSeconds, float WaitTime);
+
+	UFUNCTION(BlueprintCallable)
+	void UpdateVelocity();
 };

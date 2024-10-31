@@ -2,37 +2,32 @@
 
 
 #include "Characters/WukongCharacter.h"
-
 #include "AbilitySystemComponent.h"
-#include "Components/StatsComponent.h"
 #include "Components/Combat/LockOnComponent.h"
 #include "PlayerState/WukongPlayerState.h"
-#include "EAttribute.h"
-#include "AttributeSets/WukongAttributeSet.h"
-#include "Kismet/KismetMathLibrary.h"
-#include "Kismet/KismetSystemLibrary.h"
 #include "PlayerController/WukongPlayerController.h"
 #include "UI/WukongHUD.h"
+
+
 
 AWukongCharacter::AWukongCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	LockonComp = CreateDefaultSubobject<ULockOnComponent>(TEXT("LockonComp"));
+	LockOnComp = CreateDefaultSubobject<ULockOnComponent>(TEXT("LockonComp"));
 }
 
 void AWukongCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	WukongAnim = Cast<UWukongAnimInstance>(GetMesh()->GetAnimInstance());
+	WukongAnimInstance = Cast<UWukongAnimInstance>(GetMesh()->GetAnimInstance());
 }
 
 void AWukongCharacter::PossessedBy(AController* NewController)
 {
 	
 	Super::PossessedBy(NewController);
-	AWukongPlayerState* WukongPlayerState = Cast<AWukongPlayerState>(GetPlayerState());
 
-	if (WukongPlayerState)
+	if (AWukongPlayerState* WukongPlayerState = Cast<AWukongPlayerState>(GetPlayerState()))
 	{
 		/* Set up the Ability System Component and Attribute Set for the character by retrieving them from the PlayerState. */
 		WukongPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(WukongPlayerState, this);
@@ -54,16 +49,6 @@ AWukongHUD* AWukongCharacter::GetWukongHUD()
 {
 	AWukongPlayerController* WukongPlayerController =  Cast<AWukongPlayerController>(GetController());
 	return Cast<AWukongHUD>(WukongPlayerController->GetHUD());
-}
-
-void AWukongCharacter::AutoEndLock(AActor* Actor)
-{
-	if(LockonComp->TargetActor != Actor)
-	{
-		return;
-	}
-
-	LockonComp->EndLockOn();
 }
 
 void AWukongCharacter::ReduceHealth(float Amount)

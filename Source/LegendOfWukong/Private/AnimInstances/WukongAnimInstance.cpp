@@ -17,23 +17,15 @@ void UWukongAnimInstance::UpdateVelocity()
 	Speed = static_cast<float>(Velocity.Length());
 }
 
-void UWukongAnimInstance::HandleUpdatedTarget(AActor* NewTargetActorRef)
+void UWukongAnimInstance::UpdatedTarget(AActor* NewTarget)
 {
-	bIsInCombat = IsValid(NewTargetActorRef);
+	bIsInCombat = IsValid(NewTarget);
 }
 
 void UWukongAnimInstance::UpdateDirection()
 {
 	APawn* PawnRef = TryGetPawnOwner();
-	if(!IsValid(PawnRef))
-	{
-		return;
-	}
-
-	if(!bIsInCombat)
-	{
-		return;
-	}
+	if(!IsValid(PawnRef) || !bIsInCombat) return;
 	
 	CurrentDirection =  UKismetAnimationLibrary::CalculateDirection(
 		PawnRef->GetVelocity(),
@@ -43,7 +35,6 @@ void UWukongAnimInstance::UpdateDirection()
 
 void UWukongAnimInstance::UpdateShouldPlayRelaxAnim(float DeltaSeconds, float WaitTime)
 {
-
 	if (Speed == 0)
 	{
 		IdleTimeout += DeltaSeconds;
