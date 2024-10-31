@@ -7,9 +7,12 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "InputActionValue.h"
+#include "AttributeSets/WukongAttributeSet.h"
 #include "Characters/WukongCharacter.h"
 #include "DataAssets/DataAsset_Input.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "PlayerState/WukongPlayerState.h"
 #include "WukongGameplayTags/WukongGameplayTags.h"
 
 
@@ -81,11 +84,26 @@ void AWukongPlayerController::Jump()
 
 void AWukongPlayerController::Sprint()
 {
+	AWukongCharacter* WukongCharacter = Cast<AWukongCharacter>(GetCharacter());
+	if(WukongCharacter->GetCharacterMovement()->Velocity.Equals(FVector::Zero(), 1))
+	{
+		return;
+	}
 	
+	AWukongPlayerState* WukongPlayerState = Cast<AWukongPlayerState>(WukongCharacter->GetPlayerState());
+	UWukongAttributeSet* WukongAttributeSet = Cast<UWukongAttributeSet>(WukongPlayerState->GetAttributeSet());
+	if(WukongAttributeSet->GetStamina() < 1.0f)
+	{
+		/** End Ability When Stamina is less than 0 */
+		OnFinishSprint.Broadcast();
+	}
+
+	ActivateAbilityByTag(WukongGameplayTags::Player_Ability_Sprint);
 }
 
 void AWukongPlayerController::EndSprint()
 {
+	OnFinishSprint.Broadcast();
 }
 
 void AWukongPlayerController::Pad()

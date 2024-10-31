@@ -6,7 +6,6 @@
 #include "Components/Combat/TraceComponent.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
-#include "DataAssets/StartupAbilitiesAsset.h"
 #include "Kismet/KismetMathLibrary.h"
 
 ABaseCharacter::ABaseCharacter()

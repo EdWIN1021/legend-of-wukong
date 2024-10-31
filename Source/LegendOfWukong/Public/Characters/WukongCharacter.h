@@ -28,32 +28,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UCombatComponent> CombatComp;
-	
-	UPROPERTY(EditAnywhere)
-	float SprintCost = 1.0f;
-	
-	UPROPERTY(EditAnywhere)
-	float SprintSpeed = 1000.f;
-
-	UPROPERTY(EditAnywhere)
-	float WalkSpeed = 500.0f;
 
 	UPROPERTY(EditAnywhere)
 	double StaminaRestoreRate = 10.0;
 
 	UPROPERTY(EditAnywhere)
 	float StaminaDelayDuration = 2.0f;
-	
-	UFUNCTION(BlueprintCallable)
-	void Sprint();
-
-	UFUNCTION(BlueprintCallable)
-	void Walk();
-
-	UFUNCTION(BlueprintCallable)
-	void Pad();
-
-	const float PadCost = 2.0f;
 	
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* PadAnimMontage;
@@ -76,7 +56,6 @@ public:
 
 	/*   */
 	virtual void PossessedBy(AController* NewController) override;
-
 	
 protected:
 	virtual void BeginPlay() override;

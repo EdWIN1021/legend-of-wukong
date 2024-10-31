@@ -138,39 +138,10 @@ void AWukongCharacter::RestoreStamina()
 		GetPercentage(EAttribute::Stamina, EAttribute::MaxStamina));
 }
 
-void AWukongCharacter::Sprint()
-{
-	if(!HasEnoughStamina(SprintCost))
-	{
-		Walk();
-		return;
-	}
 
-	if(GetCharacterMovement()->Velocity.Equals(FVector::ZeroVector, 1))
-	{
-		return;
-	}
 
-	GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
-	ReduceStamina(SprintCost);
-}
 
-void AWukongCharacter::Walk()
-{
-	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
-}
 
-void AWukongCharacter::Pad()
-{
-	// bCanTakeDamage = false;
-	// ReduceStamina(PadCost);
-	// FVector Direction = (GetCharacterMovement()->Velocity.Length() < 1) ? GetActorForwardVector() : GetLastMovementInputVector();
-	// FRotator Rotation = UKismetMathLibrary::MakeRotFromX(Direction);
-	// SetActorRotation(Rotation);
-	// float Duration = PlayAnimMontage(PadAnimMontage);
-	// FTimerHandle PadTimerHandle;
-	// GetWorldTimerManager().SetTimer(PadTimerHandle, this, &AWukongCharacter::FinishPadAnim, Duration, false);
-}
 
 
 

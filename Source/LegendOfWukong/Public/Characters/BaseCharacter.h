@@ -10,7 +10,6 @@
 #include "BaseCharacter.generated.h"
 
 
-class UStartupAbilitiesAsset;
 class UAbilitySystemComponent;
 class UAttributeSet;
 
