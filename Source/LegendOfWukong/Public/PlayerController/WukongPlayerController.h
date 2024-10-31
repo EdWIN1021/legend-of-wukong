@@ -52,5 +52,7 @@ private:
 	 * Activates an ability associated with the specified gameplay tag.
 	 * @param AbilityTag The gameplay tag that identifies the ability to be activated.
 	 */
-	void ActivateAbilityByTag(const FGameplayTag& AbilityTag);
+	void ActivateAbilityByTag(const FGameplayTag& AbilityTag, float Cost);
+	
+	bool HasEnoughStamina(float Cost);
 };

@@ -30,31 +30,17 @@ public:
 	TObjectPtr<UCombatComponent> CombatComp;
 
 	UPROPERTY(EditAnywhere)
-	double StaminaRestoreRate = 10.0;
-
-	UPROPERTY(EditAnywhere)
-	float StaminaDelayDuration = 2.0f;
-	
-	UPROPERTY(EditAnywhere)
-	UAnimMontage* PadAnimMontage;
+	double StaminaRestoreRate = 10.0f;
 	
 	UFUNCTION(BlueprintCallable)
 	void RestoreStamina();
-
-	void ReduceStamina(float Amount);
-
-	bool HasEnoughStamina(float Cost);
 	
 	void AutoEndLock(AActor* Actor);
 
 	virtual void ReduceHealth(float Amount) override;
-	
-	UFUNCTION(BlueprintCallable)
-	void EnableStore();
 
 	bool bCanRestore = false;
 
-	/*   */
 	virtual void PossessedBy(AController* NewController) override;
 	
 protected:
@@ -67,6 +53,10 @@ private:
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	UWukongAnimInstance* WukongAnim;
 
-	/*  */
+	/**
+	 * Retrieves the Wukong HUD instance.
+	 *
+	 * @return A pointer to the AWukongHUD instance associated with this actor.
+	 */
 	AWukongHUD* GetWukongHUD();
 };

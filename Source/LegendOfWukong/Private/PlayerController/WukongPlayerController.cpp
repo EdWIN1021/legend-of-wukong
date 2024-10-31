@@ -79,26 +79,14 @@ void AWukongPlayerController::Look(const FInputActionValue& Value)
 
 void AWukongPlayerController::Jump()
 {
-	ActivateAbilityByTag(WukongGameplayTags::Player_Ability_Jump);
+	ActivateAbilityByTag(WukongGameplayTags::Player_Ability_Jump, 5.0f);
 }
 
 void AWukongPlayerController::Sprint()
 {
-	AWukongCharacter* WukongCharacter = Cast<AWukongCharacter>(GetCharacter());
-	if(WukongCharacter->GetCharacterMovement()->Velocity.Equals(FVector::Zero(), 1))
-	{
-		return;
-	}
-	
-	AWukongPlayerState* WukongPlayerState = Cast<AWukongPlayerState>(WukongCharacter->GetPlayerState());
-	UWukongAttributeSet* WukongAttributeSet = Cast<UWukongAttributeSet>(WukongPlayerState->GetAttributeSet());
-	if(WukongAttributeSet->GetStamina() < 1.0f)
-	{
-		/** End Ability When Stamina is less than 0 */
-		OnFinishSprint.Broadcast();
-	}
-
-	ActivateAbilityByTag(WukongGameplayTags::Player_Ability_Sprint);
+	/** Don't activate if Player is not moving */
+	if(Cast<AWukongCharacter>(GetCharacter())->GetCharacterMovement()->Velocity.Equals(FVector::Zero(), 1)) return;
+	ActivateAbilityByTag(WukongGameplayTags::Player_Ability_Sprint, 1.0f);
 }
 
 void AWukongPlayerController::EndSprint()
@@ -108,7 +96,7 @@ void AWukongPlayerController::EndSprint()
 
 void AWukongPlayerController::Pad()
 {
-	ActivateAbilityByTag(WukongGameplayTags::Player_Ability_Pad);
+	ActivateAbilityByTag(WukongGameplayTags::Player_Ability_Pad, 10.f);
 }
 
 UInputAction* AWukongPlayerController::FindInputActionByTag(const FGameplayTag& InputTag)
@@ -124,8 +112,18 @@ UInputAction* AWukongPlayerController::FindInputActionByTag(const FGameplayTag& 
 	return nullptr;
 }
 
-void AWukongPlayerController::ActivateAbilityByTag(const FGameplayTag& AbilityTag)
+void AWukongPlayerController::ActivateAbilityByTag(const FGameplayTag& AbilityTag, float Cost)
 {
+	if(!HasEnoughStamina(Cost))
+	{
+		/** End Ability When Stamina is less than 0 */
+		if(AbilityTag == WukongGameplayTags::Player_Ability_Sprint)
+		{
+			OnFinishSprint.Broadcast();
+		}
+		return;
+	}
+	
 	AWukongCharacter* WukongCharacter = Cast<AWukongCharacter>(GetCharacter());
 	UAbilitySystemComponent* ASC = WukongCharacter->GetAbilitySystemComponent();
 	
@@ -137,6 +135,13 @@ void AWukongPlayerController::ActivateAbilityByTag(const FGameplayTag& AbilityTa
 			return;
 		}
 	}
+}
+
+bool AWukongPlayerController::HasEnoughStamina(float Cost)
+{
+	AWukongCharacter* WukongCharacter = Cast<AWukongCharacter>(GetCharacter());
+	UWukongAttributeSet* WukongAttributeSet = Cast<UWukongAttributeSet>(WukongCharacter->GetAttributeSet());
+	return  WukongAttributeSet->GetStamina() > Cost;
 }
 
 
