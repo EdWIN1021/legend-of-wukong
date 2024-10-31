@@ -40,6 +40,7 @@ private:
 	void Sprint();
 	void EndSprint();
 	void Pad();
+	void ComboAttack();
 	
 	/** Event triggered when the sprint key is released to end the ability. */
 	UPROPERTY(BlueprintAssignable)

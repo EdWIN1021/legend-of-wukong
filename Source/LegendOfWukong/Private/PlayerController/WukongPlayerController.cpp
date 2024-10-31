@@ -41,6 +41,8 @@ void AWukongPlayerController::SetupInputComponent()
 		
 		EnhancedInputComponent->BindAction(FindInputActionByTag(WukongGameplayTags::InputTag_Sprint), ETriggerEvent::Triggered, this, &AWukongPlayerController::Sprint);
 		EnhancedInputComponent->BindAction(FindInputActionByTag(WukongGameplayTags::InputTag_Sprint), ETriggerEvent::Completed, this, &AWukongPlayerController::EndSprint);
+
+		EnhancedInputComponent->BindAction(FindInputActionByTag(WukongGameplayTags::InputTag_Attack), ETriggerEvent::Started, this, &AWukongPlayerController::ComboAttack);
 	}
 }
 
@@ -103,6 +105,11 @@ void AWukongPlayerController::EndSprint()
 void AWukongPlayerController::Pad()
 {
 	ActivateAbilityByTag(WukongGameplayTags::Player_Ability_Pad, 10.f);
+}
+
+void AWukongPlayerController::ComboAttack()
+{
+	ActivateAbilityByTag(WukongGameplayTags::Player_Ability_Attack, 5.f);
 }
 
 UInputAction* AWukongPlayerController::FindInputActionByTag(const FGameplayTag& InputTag)

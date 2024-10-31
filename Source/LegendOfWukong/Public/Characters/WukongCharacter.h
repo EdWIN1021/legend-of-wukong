@@ -29,24 +29,19 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UCombatComponent> CombatComp;
 
-	UPROPERTY(EditAnywhere)
-	double StaminaRestoreRate = 10.0f;
-	
+	virtual void PossessedBy(AController* NewController) override;
+
 	void AutoEndLock(AActor* Actor);
 
 	virtual void ReduceHealth(float Amount) override;
-
-	bool bCanRestore = false;
-
-	virtual void PossessedBy(AController* NewController) override;
 	
 protected:
 	virtual void BeginPlay() override;
 
 private:
-	void FinishPadAnim();
 	bool bCanTakeDamage = true;
-	
+
+	// lock on anim
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	UWukongAnimInstance* WukongAnim;
 

@@ -5,7 +5,7 @@
 
 #include "AttributeSets/WukongAttributeSet.h"
 
-void AWukongHUD::BindDelegates(UAbilitySystemComponent* AbilitySystemComponent, UAttributeSet* AttributeSet)
+void AWukongHUD::BindDelegates(UAbilitySystemComponent* AbilitySystemComponent, UAttributeSet* AttributeSet) const
 {
 	
 	const UWukongAttributeSet* WukongAttributeSet = Cast<UWukongAttributeSet>(AttributeSet);

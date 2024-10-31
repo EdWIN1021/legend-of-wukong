@@ -20,7 +20,6 @@ class LEGENDOFWUKONG_API AWukongHUD : public AHUD
 	GENERATED_BODY()
 	
 public:
-
 	UFUNCTION(BlueprintImplementableEvent)
 	void InitializedHUD();
 	
@@ -36,5 +35,5 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="Attributes")
 	FOnAttributeChangedSignature OnMaxHealthChanged;
 	
-	void BindDelegates(UAbilitySystemComponent* AbilitySystemComponent, UAttributeSet* AttributeSet);
+	void BindDelegates(UAbilitySystemComponent* AbilitySystemComponent, UAttributeSet* AttributeSet) const;
 };

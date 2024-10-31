@@ -9,9 +9,6 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "LockOnComponent.generated.h"
 
-/**
- * ULockOnComponent handles the logic for locking onto a target and adjusting the character's view and movement.
- */
 
 DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE_OneParam(
 	FOnUpdatedTargetSignature,

@@ -11,7 +11,6 @@ ULockOnComponent::ULockOnComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
-// BeginPlay - Called when the game starts
 void ULockOnComponent::BeginPlay()
 {
 	Super::BeginPlay();

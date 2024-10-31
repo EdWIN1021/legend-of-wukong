@@ -52,11 +52,6 @@ void AWukongCharacter::PossessedBy(AController* NewController)
 	}
 }
 
-void AWukongCharacter::FinishPadAnim()
-{
-	bCanTakeDamage = true;
-}
-
 AWukongHUD* AWukongCharacter::GetWukongHUD()
 {
 	AWukongPlayerController* WukongPlayerController =  Cast<AWukongPlayerController>(GetController());

@@ -12,7 +12,5 @@ void UBTS_PlayerDistance::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 	FVector PlayerLocation = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
 
 	float Distance = static_cast<float>(FVector::Distance(CurrentLocation, PlayerLocation));
-
 	OwnerComp.GetBlackboardComponent()->SetValueAsFloat(TEXT("Distance"),Distance);
-	
 }

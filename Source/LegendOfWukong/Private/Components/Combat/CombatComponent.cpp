@@ -2,12 +2,10 @@
 
 
 #include "Components/Combat/CombatComponent.h"
-
 #include "Characters/WukongCharacter.h"
 #include "GameFramework/Character.h"
 #include "Kismet/KismetMathLibrary.h"
 
-// Sets default values for this component's properties
 UCombatComponent::UCombatComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
