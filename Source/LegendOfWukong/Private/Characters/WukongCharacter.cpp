@@ -20,6 +20,11 @@ void AWukongCharacter::BeginPlay()
 	WukongAnimInstance = Cast<UWukongAnimInstance>(GetMesh()->GetAnimInstance());
 }
 
+void AWukongCharacter::HandleDeath()
+{
+	PlayAnimMontage(DeathAnim);
+}
+
 void AWukongCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
