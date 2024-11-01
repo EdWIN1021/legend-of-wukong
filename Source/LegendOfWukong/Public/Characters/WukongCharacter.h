@@ -19,8 +19,6 @@ class LEGENDOFWUKONG_API AWukongCharacter : public ABaseCharacter
 public:
 	AWukongCharacter();
 
-	virtual void ReduceHealth(float Amount) override;
-
 	/**
 	 * Retrieves the Lock-On component.
 	 *

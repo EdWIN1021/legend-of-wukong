@@ -2,10 +2,14 @@
 
 
 #include "Components/Combat/TraceComponent.h"
+
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AttributeSets/WukongAttributeSet.h"
 #include "Characters/BaseCharacter.h"
 #include "Engine/DamageEvents.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "WukongGameplayTags/WukongGameplayTags.h"
 
 UTraceComponent::UTraceComponent()
 {
@@ -20,7 +24,7 @@ void UTraceComponent::HandleResetAttack()
 void UTraceComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	SkeletakMesh = GetOwner()->FindComponentByClass<USkeletalMeshComponent>();
+	WeaponMesh = GetOwner()->FindComponentByClass<USkeletalMeshComponent>();
 }
 
 void UTraceComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -36,13 +40,13 @@ void UTraceComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 
 	for(const FTraceSockets Socket : Sockets)
 	{
-		FVector StartSocketLocation = SkeletakMesh->GetSocketLocation(Socket.Start);
-		FVector EndSocketLocation = SkeletakMesh->GetSocketLocation(Socket.End);
-		FQuat ShapeRotation = SkeletakMesh->GetSocketQuaternion(Socket.Rotation);
+		FVector StartSocketLocation = WeaponMesh->GetSocketLocation(Socket.Start);
+		FVector EndSocketLocation = WeaponMesh->GetSocketLocation(Socket.End);
+		FQuat ShapeRotation = WeaponMesh->GetSocketQuaternion(Socket.Rotation);
 
 		TArray<FHitResult> Results;
 		double WeaponDistance = FVector::Distance(StartSocketLocation, EndSocketLocation);
-		FVector BoxHalfExtent(BoxCollisionLength, BoxCollisionLength, WeaponDistance);;
+		FVector BoxHalfExtent(BoxCollisionLength, BoxCollisionLength, WeaponDistance);
 		BoxHalfExtent /= 2;
 
 		FCollisionShape Box = FCollisionShape::MakeBox(BoxHalfExtent);
@@ -63,6 +67,7 @@ void UTraceComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 			AllResults.Add(Hit);
 		}
 
+		// delete
 		if(bDebugMode)
 		{
 			FVector CenterPoint = UKismetMathLibrary::VLerp(StartSocketLocation, EndSocketLocation, 0.5f);
@@ -78,37 +83,42 @@ void UTraceComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 		}
 	}
 	
-	if(AllResults.Num() == 0)
-	{
-		return;
-	}
-	
-	float CharacterDamage = 0.0f;
+	if(AllResults.Num() == 0) return;
 
-	
-	if(ABaseCharacter* Owner = Cast<ABaseCharacter>(GetOwner()))
-	{	
-		CharacterDamage = Owner->ApplyDamage();
-	}
+	UAbilitySystemComponent* SourceASC = Cast<ABaseCharacter>(GetOwner())->GetAbilitySystemComponent();
+	FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass, 1, SourceASC->MakeEffectContext());
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, WukongGameplayTags::Damage, GetOwnerDamage(GetOwner()));
 
-	FDamageEvent TargetAttackedEvent; 
-	
+	float Damage = GetOwnerDamage(GetOwner());
+
 	for(const FHitResult& Hit : AllResults)
 	{
+		FDamageEvent TargetAttackedEvent;
 		AActor* Target = Hit.GetActor();
 
-		if(TargetsToIgnore.Contains(Target))
+		if(TargetsToIgnore.Contains(Target)) continue;
+
+		if(UAbilitySystemComponent* TargetASC = Cast<ABaseCharacter>(Target)->GetAbilitySystemComponent())
 		{
-			continue;
-		}
+			TargetASC->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+		};
 		
 		Target->TakeDamage(
-			CharacterDamage,
+			Damage,
 			TargetAttackedEvent,
 			GetOwner()->GetInstigatorController(),
 			GetOwner());
 	
 		TargetsToIgnore.AddUnique(Target);
 	}
+}
+
+float UTraceComponent::GetOwnerDamage(AActor* InOwner){
+	if(ABaseCharacter* Owner = Cast<ABaseCharacter>(InOwner))
+	{	
+		UWukongAttributeSet* AS = Cast<UWukongAttributeSet>(Owner->GetAttributeSet());
+		return  AS->GetStrength();
+	}
+	return 0.f;
 }
 

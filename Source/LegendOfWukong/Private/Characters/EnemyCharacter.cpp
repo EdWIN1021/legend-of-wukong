@@ -3,6 +3,8 @@
 #include "Characters/EnemyCharacter.h"
 #include "AIController.h"
 #include "BrainComponent.h"
+#include "AbilitySystem/WukongAbilitySystemComponent.h"
+#include "AttributeSets/WukongAttributeSet.h"
 #include "Characters/WukongCharacter.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/Combat/LockOnComponent.h"
@@ -11,6 +13,45 @@
 AEnemyCharacter::AEnemyCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	
+	AbilitySystemComponent = CreateDefaultSubobject<UWukongAbilitySystemComponent>(TEXT("EnemyAbilitySystemComponent"));
+	AttributeSet = CreateDefaultSubobject<UWukongAttributeSet>(TEXT("EnemyAttributeSet"));
+}
+
+void AEnemyCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	if (AbilitySystemComponent)
+	{
+		AbilitySystemComponent->InitAbilityActorInfo(this, this);
+		BindDelegates();
+		InitializeAttributes();
+	}
+}
+
+void AEnemyCharacter::BindDelegates()
+{
+	if(const UWukongAttributeSet* AS = Cast<UWukongAttributeSet>(AttributeSet))
+	{
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AS->GetHealthAttribute()).AddLambda(
+			[this](const FOnAttributeChangeData Data)
+			{
+				OnHealthChanged.Broadcast(Data.NewValue);
+			}
+		);
+
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AS->GetMaxHealthAttribute()).AddLambda(
+			[this](const FOnAttributeChangeData Data)
+			{
+				OnMaxHealthChanged.Broadcast(Data.NewValue);
+			}
+		);
+	}
+}
+
+void AEnemyCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
 }
 
 void AEnemyCharacter::HandleDeath()
@@ -43,3 +84,5 @@ void AEnemyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
+
+

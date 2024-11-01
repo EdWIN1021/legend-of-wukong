@@ -8,8 +8,6 @@
 #include "PlayerController/WukongPlayerController.h"
 #include "UI/WukongHUD.h"
 
-
-
 AWukongCharacter::AWukongCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -24,7 +22,6 @@ void AWukongCharacter::BeginPlay()
 
 void AWukongCharacter::PossessedBy(AController* NewController)
 {
-	
 	Super::PossessedBy(NewController);
 
 	if (AWukongPlayerState* WukongPlayerState = Cast<AWukongPlayerState>(GetPlayerState()))
@@ -50,17 +47,6 @@ AWukongHUD* AWukongCharacter::GetWukongHUD()
 	AWukongPlayerController* WukongPlayerController =  Cast<AWukongPlayerController>(GetController());
 	return Cast<AWukongHUD>(WukongPlayerController->GetHUD());
 }
-
-void AWukongCharacter::ReduceHealth(float Amount)
-{
-	if(!bCanTakeDamage){
-		return;
-	}
-	
-	Super::ReduceHealth(Amount);
-}
-
-
 
 
 

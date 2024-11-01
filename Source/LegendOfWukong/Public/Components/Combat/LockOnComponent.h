@@ -26,7 +26,7 @@ public:
 	ULockOnComponent();
 
 	TWeakObjectPtr<AEnemyCharacter> TargetEnemy;
-	
+
 	UPROPERTY(BlueprintAssignable)
 	FOnUpdatedTargetSignature OnUpdatedTargetDelegate;
 
@@ -41,8 +41,6 @@ protected:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	
 private:
-	float LockOnRadius = 750.f;
-
 	/** The character that owns this component. */
 	TWeakObjectPtr<ACharacter> Owner;
 	
@@ -54,6 +52,9 @@ private:
 
 	/** The movement component of the owning character. */
 	TWeakObjectPtr<UCharacterMovementComponent> MovementComponent;
+
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	float LockOnRadius = 750.f;
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	double AutoEndLockOnDistance = 1000.f;

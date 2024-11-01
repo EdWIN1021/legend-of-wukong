@@ -8,6 +8,8 @@
 #include "TraceComponent.generated.h"
 
 
+class UGameplayEffect;
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class LEGENDOFWUKONG_API UTraceComponent : public UActorComponent
 {
@@ -17,16 +19,7 @@ class LEGENDOFWUKONG_API UTraceComponent : public UActorComponent
 public:	
 	UTraceComponent();
 
-	USkeletalMeshComponent* SkeletakMesh;
-
-	// UPROPERTY(EditAnywhere)
-	// FName Start;
-	//
-	// UPROPERTY(EditAnywhere)
-	// FName End;
-	//
-	// UPROPERTY(EditAnywhere)
-	// FName Rotation;
+	TWeakObjectPtr<USkeletalMeshComponent> WeaponMesh;
 		
 	UPROPERTY(EditAnywhere)
 	TArray<FTraceSockets> Sockets;
@@ -37,7 +30,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	bool bDebugMode = false;
 
-	TArray<AActor*> TargetsToIgnore;
+	TArray<TWeakObjectPtr<AActor>> TargetsToIgnore;
 
 	UFUNCTION(BlueprintCallable)
 	void HandleResetAttack();
@@ -45,7 +38,13 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	bool bIsAttacking = false;
 	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<UGameplayEffect> DamageEffectClass;
+	
 protected:
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+private:
+	float GetOwnerDamage(AActor* InOwner);
 };

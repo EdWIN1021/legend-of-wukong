@@ -39,6 +39,8 @@ void ABaseCharacter::ReduceHealth(float Amount)
 	}
 }
 
+
+
 float ABaseCharacter::ApplyDamage()
 {
 	return StatsComp->Attributes[EAttribute::Strength];

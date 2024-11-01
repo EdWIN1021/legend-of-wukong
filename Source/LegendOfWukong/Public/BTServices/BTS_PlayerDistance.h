@@ -16,5 +16,4 @@ class LEGENDOFWUKONG_API UBTS_PlayerDistance : public UBTService
 
 protected:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
-	
 };

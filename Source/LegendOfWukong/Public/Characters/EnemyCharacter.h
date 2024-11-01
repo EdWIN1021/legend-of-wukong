@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Characters/BaseCharacter.h"
+#include "UI/WukongHUD.h"
 #include "EnemyCharacter.generated.h"
 
 /**
@@ -16,6 +17,16 @@ class LEGENDOFWUKONG_API AEnemyCharacter : public ABaseCharacter
 
 public:
 	AEnemyCharacter();
+
+	virtual void BeginPlay() override;
+	virtual void PossessedBy(AController* NewController) override;
+
+	/** Delegates*/
+	UPROPERTY(BlueprintAssignable, Category="Enemy Attributes")
+	FOnAttributeChangedSignature OnHealthChanged;
+
+	UPROPERTY(BlueprintAssignable, Category="Enemy Attributes")
+	FOnAttributeChangedSignature OnMaxHealthChanged;
 
 	UPROPERTY(EditAnywhere)
 	float Speed = 400.f;
@@ -32,6 +43,9 @@ public:
 	
 	virtual void Tick(float DeltaTime) override;
 
+protected:
+	void BindDelegates();
+	
 private:
 	void EndLockOn();
 };

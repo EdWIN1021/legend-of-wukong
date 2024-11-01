@@ -4,14 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
+#include "EAttribute.h"
 #include "GameplayEffect.h"
 #include "DataAssets/DataAsset_Abilities.h"
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
 
+class UTraceComponent;
 class UAbilitySystemComponent;
 class UAttributeSet;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTargetDeadSignature);
 
 UCLASS()
 class LEGENDOFWUKONG_API ABaseCharacter : public ACharacter, public IAbilitySystemInterface
@@ -24,9 +28,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UStatsComponent* StatsComp;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UTraceComponent* TraceComp;
-
+	UPROPERTY(BlueprintAssignable)
+	FOnTargetDeadSignature OnTargetDead;
+	
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* DeathAnim;
 	
@@ -53,8 +57,11 @@ protected:
 
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Component | Trace")
+	TObjectPtr<UTraceComponent> TraceComp;
 	
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "GameplayAbilitySystem | GameplayEffects")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "GameplayAbilitySystem | GameplayEffects")
 	TSubclassOf<UGameplayEffect> InitialAttributes;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "GameplayAbilitySystem | GameplayAbilities")

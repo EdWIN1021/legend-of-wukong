@@ -44,4 +44,14 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category= "Attributes")
 	FGameplayAttributeData Strength;
 	ATTRIBUTE_ACCESSORS(UWukongAttributeSet, Strength);
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category= "Attributes")
+	FGameplayAttributeData InComingDamage;
+	ATTRIBUTE_ACCESSORS(UWukongAttributeSet, InComingDamage);
+
+	
+
+	
+
+	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 };

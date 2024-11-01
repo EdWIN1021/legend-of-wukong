@@ -2,13 +2,28 @@
 
 #include "Characters/BossCharacter.h"
 #include "AIController.h"
+#include "AbilitySystem/WukongAbilitySystemComponent.h"
+#include "AttributeSets/WukongAttributeSet.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Characters/WukongCharacter.h"
 #include "Components/StatsComponent.h"
 
+
+
 void ABossCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (AbilitySystemComponent)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("AbilitySystemComponent"));
+	}
+
+	if (AttributeSet)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("AttributeSet"));
+	}
+
 	Controller = GetController<AAIController>();
 	BlackboardComp = GetController<AAIController>()->GetBlackboardComponent();
 	BlackboardComp->SetValueAsEnum(
@@ -31,6 +46,7 @@ float ABossCharacter::GetAnimDuration()
 {
 	return AnimDuration;
 }
+
 
 void ABossCharacter::DetectPawn(APawn* DetectedPawn, APawn* PawnToDetect)
 {
