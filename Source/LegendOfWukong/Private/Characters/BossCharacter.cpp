@@ -6,7 +6,6 @@
 #include "AttributeSets/WukongAttributeSet.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Characters/WukongCharacter.h"
-#include "Components/StatsComponent.h"
 
 
 
@@ -29,10 +28,6 @@ void ABossCharacter::BeginPlay()
 	BlackboardComp->SetValueAsEnum(
 		TEXT("CurrentState"),
 		InitialState
-	);
-
-	GetWorld()->GetFirstPlayerController()->GetPawn<AWukongCharacter>()->StatsComp->OnZeroHealthDelegate.AddDynamic(
-		this, &ABossCharacter::HandlePlayerDeath
 	);
 }
 

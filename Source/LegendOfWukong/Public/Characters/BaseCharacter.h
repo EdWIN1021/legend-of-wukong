@@ -25,25 +25,14 @@ class LEGENDOFWUKONG_API ABaseCharacter : public ACharacter, public IAbilitySyst
 public:
 	ABaseCharacter();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UStatsComponent* StatsComp;
-
 	UPROPERTY(BlueprintAssignable)
 	FOnTargetDeadSignature OnTargetDead;
 	
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* DeathAnim;
-	
-	UFUNCTION(BlueprintPure)
-	virtual float GetPercentage(EAttribute Current, EAttribute Max);
-	
-	UFUNCTION(BlueprintCallable)
-	virtual void ReduceHealth(float Amount);
 
 	UFUNCTION(BlueprintCallable)
 	virtual void HandleDeath(){};
-
-	virtual float ApplyDamage();
 
 	//~ Begin IAbilitySystemInterface Interface
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;

@@ -14,7 +14,6 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "PlayerState/WukongPlayerState.h"
 #include "WukongGameplayTags/WukongGameplayTags.h"
 
 
@@ -161,7 +160,6 @@ void AWukongPlayerController::ActivateAbilityByTag(const FGameplayTag& AbilityTa
 
 void AWukongPlayerController::RestoreStamina()
 {
-
 	if(!bCanRestoreStamina) return;
 	
 	AWukongCharacter* WukongCharacter = Cast<AWukongCharacter>(GetCharacter());
@@ -181,6 +179,3 @@ bool AWukongPlayerController::HasEnoughStamina(float Cost) const
 	UWukongAttributeSet* WukongAttributeSet = Cast<UWukongAttributeSet>(WukongCharacter->GetAttributeSet());
 	return  WukongAttributeSet->GetStamina() > Cost;
 }
-
-
-

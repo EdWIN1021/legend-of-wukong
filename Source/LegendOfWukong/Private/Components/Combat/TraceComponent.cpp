@@ -2,13 +2,10 @@
 
 
 #include "Components/Combat/TraceComponent.h"
-
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AttributeSets/WukongAttributeSet.h"
 #include "Characters/BaseCharacter.h"
 #include "Engine/DamageEvents.h"
-#include "Kismet/KismetMathLibrary.h"
-#include "Kismet/KismetSystemLibrary.h"
 #include "WukongGameplayTags/WukongGameplayTags.h"
 
 UTraceComponent::UTraceComponent()
@@ -52,7 +49,7 @@ void UTraceComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 		FCollisionShape Box = FCollisionShape::MakeBox(BoxHalfExtent);
 		FCollisionQueryParams QueryParams(FName(TEXT("Ignore Collision Params")), false, GetOwner());
 	
-		bool bHasFoundTarget = GetWorld()->SweepMultiByChannel(
+		GetWorld()->SweepMultiByChannel(
 			Results,
 			StartSocketLocation,
 			EndSocketLocation,
@@ -65,21 +62,6 @@ void UTraceComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 		for(FHitResult Hit : Results)
 		{
 			AllResults.Add(Hit);
-		}
-
-		// delete
-		if(bDebugMode)
-		{
-			FVector CenterPoint = UKismetMathLibrary::VLerp(StartSocketLocation, EndSocketLocation, 0.5f);
-			UKismetSystemLibrary::DrawDebugBox(
-				GetWorld(),
-				CenterPoint,
-				Box.GetExtent(),
-				bHasFoundTarget ? FLinearColor::Green : FLinearColor::Red,
-				ShapeRotation.Rotator(),
-				1.0f,
-				2.0f
-				);
 		}
 	}
 	
@@ -102,13 +84,6 @@ void UTraceComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 		{
 			TargetASC->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
 		};
-		
-		Target->TakeDamage(
-			Damage,
-			TargetAttackedEvent,
-			GetOwner()->GetInstigatorController(),
-			GetOwner());
-	
 		TargetsToIgnore.AddUnique(Target);
 	}
 }

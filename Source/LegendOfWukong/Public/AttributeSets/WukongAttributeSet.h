@@ -49,9 +49,5 @@ public:
 	FGameplayAttributeData InComingDamage;
 	ATTRIBUTE_ACCESSORS(UWukongAttributeSet, InComingDamage);
 
-	
-
-	
-
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 };
